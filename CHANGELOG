@@ -1,0 +1,264 @@
+2016-8-20 Yu-Sung Su <suyusung@tsinghua.edu.cn>
+    * DESCRIPTION (Version, Date): 0.6-1
+    * R/jagsParalle: add requireNamespace("coda")
+
+
+2015-8-22 Yu-Sung Su <suyusung@tsinghua.edu.cn>
+    * DESCRIPTION (Version, Date): 0.5-6
+    * NAMESPACE: add more import
+    * R/jagsParalle: pass data into Glob.env
+
+
+2015-4-19 Yu-Sung Su <suyusung@tsinghua.edu.cn>
+    * DESCRIPTION (Version, Date): 0.5-5
+    * DESCRIPTION: SystemRequirements: JAGS (http://mcmc-jags.sourceforge.net)
+    * DESCRIPTION: detailed description about R2jags.
+
+2015-3-5 Yu-Sung Su <suyusung@tsinghua.edu.cn>
+    * man/jags: comment out xyplot and densityplot from example code to avoid from importing lattice library.
+
+2015-1-9 Yu-Sung Su <suyusung@tsinghua.edu.cn>
+    * man/jags: add description for export_obj_name.
+    * R/jagsParallel: add new parameter export_obj_name. Allow users to export other objects to the cluster.
+
+2014-6-19 Yu-Sung Su <suyusung@tsinghua.edu.cn>
+    * DESCRIPTION (Version, Date): 0.04-03
+    * R/jags: add parameters jags.module to handle module to be loaded.
+
+2014-5-30 Yu-Sung Su <suyusung@tsinghua.edu.cn>
+    * DESCRIPTION (Version, Date): 0.04-02
+    * R/jags: update the method for generating Random.seed in jags()
+    * R/jagsParallel:
+        1. pass envir parameters, now can handle complex data
+        2. fix a bug when passing model file as a function into jags.parallel()
+
+
+2014-2-26 Yu-Sung Su <suyusung@tsinghua.edu.cn>
+    * DESCRIPTION (Version, Date): 0.04-01
+    * R/as.mcmc: fix counter error in update and autoupdate
+    * R/update: fix counter error in update and autoupdate
+
+2014-1-18 Yu-Sung Su <suyusung@tsinghua.edu.cn>
+    * DESCRIPTION (Version, Date): 0.03-12
+    * R/as.mcmc: fix a bug of casuing false convergence when n.chains==1
+
+2013-8-21 Yu-Sung Su <suyusung@tsinghua.edu.cn>
+    * DESCRIPTION (Version, Date): 0.03-11
+    * clean up DESCRIPTION and NAMESPACE, changes are in depends and imports.
+
+2013-8-16 Yu-Sung Su <suyusung@tsinghua.edu.cn>
+    * DESCRIPTION (Version, Date): 0.03-10
+    * R/jags: fix a minor gug in RNGname.
+
+2013-7-14 Yu-Sung Su <suyusung@tsinghua.edu.cn>
+    * DESCRIPTION (Version, Date): 0.03-09
+    * R/jags: users can set RNGname in jags() now.
+
+2012-7-30  Yu-Sung Su <suyusung@tsinghua.edu.cn>
+    * DESCRIPTION (Version, Date): 0.03-08
+    * R/jags: fix inits issue (thanks to Martyn Plummer)
+
+2012-6-30  Yu-Sung Su <suyusung@tsinghua.edu.cn>
+    * DESCRIPTION (Version, Date): 0.03-07
+    * R/as.bugs.array2: fix the code where array() meets dimension = NULL
+
+2012-1-28  Yu-Sung Su <suyusung@tsinghua.edu.cn>
+    * DESCRIPTION (Version, Date): 0.03-06.(Thanks to Ben Bolker)
+    * R/jags:
+        1. alow 4 ways of data input,
+        2. alow bugs model as an R function.
+    * man/jags: more example code to illustrate the added new features.
+
+2012-1-27  Yu-Sung Su <suyusung@tsinghua.edu.cn>
+    * DESCRIPTION (Version, Date): 0.03-05.
+    * R/jags: better way to handle initialization, better use of random.seed
+    * R/jags.parallel: set RNG stream in cluster.
+
+
+2012-1-25  Yu-Sung Su <suyusung@tsinghua.edu.cn>
+    * DESCRIPTION (Version, Date): 0.03-04.
+    * R/AllClass: jags.parallel now contains rjags
+    * R/jags.parallel:
+        1. add jags.seed so that jags.parallel will start with different inits.
+        2. now jags.parallel computes DIC
+    * R/update: update for jags.parallel now computes DIC
+    * R/traceplot: now works with jags.parallel
+
+2012-1-22  Yu-Sung Su <suyusung@tsinghua.edu.cn>
+    * DESCRIPTION (Version, Date): 0.03-03.
+    * R/AllClass: add rjags.parallel class
+    * R/jags.parallel: fix a bug for not naming the sims.array correctly
+    * R/recompile: add recompile() for the rjags.parallel class
+    * R/update: add update() for the rjags.parallel class
+
+2012-1-12  Yu-Sung Su <ys463@columbia.edu>
+    * DESCRIPTION (Version, Date): 0.03-02.
+    * R/jags.parallel: add new function that runs jags parallely
+
+2011-8-8  Masanao Yajima <yajima@ucla.edu>
+    * DESCRIPTION (Version, Date): 0.02-29.
+    * R/jags: Cleaned up the code.
+
+2011-7-28  Yu-Sung Su <ys463@columbia.edu>
+    * DESCRIPTION (Version, Date): 0.02-28.
+    * R/recompile/jags: add end.adaptation=TRUE
+
+2011-7-21  Yu-Sung Su <ys463@columbia.edu>
+    * DESCRIPTION (Version, Date): 0.02-16.
+    * R/print: fix a bug that would print out NA when DIC=FALSE
+
+2011-3-30  Yu-Sung Su <ys463@columbia.edu>
+    * DESCRIPTION (Version, Date): 0.02-15.
+    * R/print: fix a bug that would print out variable name wrongly
+
+2011-3-17  Yu-Sung Su <ys463@columbia.edu>
+    * DESCRIPTION (Version, Date): 0.02-14.
+    * R/print: miscollect sds as means in printout
+
+2011-3-10  Yu-Sung Su <ys463@columbia.edu>
+    * DESCRIPTION (Version, Date): 0.02-13.
+    * R/print: allow output to print with user-specified quantile
+
+2010-12-8  Yu-Sung Su <ys463@columbia.edu>
+    * DESCRIPTION (Version, Date): 0.02-11.
+    * man/jags: \dontrun jags2, need to write a function to search for JAGS.
+
+2010-9-28  Yu-Sung Su <ys463@columbia.edu>
+    * DESCRIPTION (Version, Date): 0.02-10.
+    * man/traceplot: comment out docType
+
+
+2010-8-10  Yu-Sung Su <ys463@columbia.edu>
+    * DESCRIPTION (Version, Date): 0.02-09.
+    * man/jags: reactivate dic.samples example.
+
+
+2010-5-23  Yu-Sung Su <ys463@columbia.edu>
+    * DESCRIPTION (Version, Date): 0.02-08.
+    * man/jags: reactivate dic.samples example.
+
+2010-5-18  Yu-Sung Su <ys463@columbia.edu>
+    * DESCRIPTION (Version, Date): 0.02-02.
+    * R/jags2:
+        1. fix a bug in jagsscript.
+        2. change CODAIndex to CODAindex
+    * R/jags.sim: change CODAIndex to CODAindex
+
+2010-2-3  Yu-Sung Su <ys463@columbia.edu>
+    * DESCRIPTION (Version, Date): 0.02-01.
+    * R/as.bugs.array: fix sims.list permutation
+    * R/jags.sim: fix sims list permutation
+    * R/jags2: fix missing data.list name, this causes read.rjags failure
+
+2009-12-21  Yu-Sung Su <ys463@columbia.edu>
+    * DESCRIPTION (Version, Date): 0.01-30.
+    * R/as.bugs.array2: comment out n.burnin=0 in the code.
+
+2009-12-15  Yu-Sung Su <ys463@columbia.edu>
+    * DESCRIPTION (Version, Date): 0.01-29.
+    * R/jags: now really allow a data to be a data list.
+    * R/as.mcmc: create new a as.mcmc.rjags method
+    * R/traceplot: reset par(ask) while exiting traceplot
+
+2009-12-14  Yu-Sung Su <ys463@columbia.edu>
+    * DESCRIPTION (Version, Date): 0.01-28.
+    * R/autojags: fix a bug in the condtion of checking convergence
+
+2009-11-9  Yu-Sung Su <ys463@columbia.edu>
+    * DESCRIPTION (Version, Date): 0.01-27.
+    * R/jags:
+      1. change the way to specify the working directory.
+      2. allow data to be list of data object.
+    * R/jags2:
+      1. change the way to specify the working directory.
+      2. allow data to be list of data object.
+      3. coda outputs are now named as CODAchain1 and CODAIndex
+    * R/jags.sim: read coda output as CODAchain1 and CODAIndex
+
+2009-10-12  Yu-Sung Su <ys463@columbia.edu>
+    * DESCRIPTION (Version, Date): 0.01-26.
+    * R/jags: get rid of parameter n.sims
+
+
+2009-8-18  Yu-Sung Su <ys463@columbia.edu>
+    * DESCRIPTION (Version, Date): 0.01-25.
+    * add attach.jags and detach.jags functions.
+
+2009-8-6  Yu-Sung Su <ys463@columbia.edu>
+    * DESCRIPTION (Version, Date): 0.01-24.
+    * fix a bug in jags.sim and as.bugs.array2 (DIC calculation)
+      thanks to Luwis Diya
+
+2009-5-4  Yu-Sung Su <ys463@columbia.edu>
+    * DESCRIPTION (Version, Date): 0.01-23.
+    * fix jags.sim and as.bugs.array2 to be consistent with WinBUGS output (sims.list)
+
+2009-4-13  Yu-Sung Su <ys463@columbia.edu>
+    * DESCRIPTION (Version, Date): 0.01-22.
+    * delete the option n.adapt for jags() and incorporate that into n.burnin
+      This is to make jags() more consistent with bugs().
+
+2009-3-10  Yu-Sung Su <ys463@columbia.edu>
+    * DESCRIPTION (Version, Date): 0.01-21.
+    * pass option "progress.bar" to functions
+
+2009-3-8  Yu-Sung Su <ys463@columbia.edu>
+    * DESCRIPTION (Version, Date): 0.01-20.
+    * n.adpate in jags.model now set to 0 but use adapte() to adapte
+      jags.model.
+
+2009-3-7  Yu-Sung Su <ys463@columbia.edu>
+    * DESCRIPTION (Version, Date): 0.01-19.
+    * add refresh rate option for the progress bar.
+
+
+2009-3-4  Yu-Sung Su <ys463@columbia.edu>
+    * DESCRIPTION (Version, Date): 0.01-17.
+    * R/as.bugs.array2: provide by Eduardo Leoni to fix dimension problem of jags output.
+        (It is actually the problem of as.bugs.array.  JAGS simply returns different dimenstion.
+        So we need new as.bugs.array2 here.  Right now, keep it Internal, maybe export later!)
+
+2009-2-23  Yu-Sung Su <ys463@columbia.edu>
+    * DESCRIPTION (Version, Date): 0.01-16.
+    * R/jags: nchain --> n.chains (changed by rjags)
+
+
+2009-2-10  Yu-Sung Su <ys463@columbia.edu>
+    * DESCRIPTION (Version, Date): 0.01-15.
+    * R/jags: inits=NULL, let jags gen inits
+
+
+2009-1-28  Yu-Sung Su <ys463@columbia.edu>
+    * DESCRIPTION (Version, Date): 0.01-14.
+    * R/traceplot: add traceplot generic and rjags method
+    * R/jags: fix the bug when n.burnin=0
+
+
+2008-11-6  Yu-Sung Su <ys463@columbia.edu>
+    * DESCRIPTION (Version, Date): 0.01-13.
+    * R/recompile: update set to 100 to ensure complete adaptation
+
+
+2008-10-17  Yu-Sung Su <ys463@columbia.edu>
+    * DESCRIPTION (Version, Date): 0.01-12.
+    * man/recompile: documentation for recompile.
+    * R/recompile: new function to pick up previous saved rjags object.
+
+
+2008-10-7  Yu-Sung Su <ys463@columbia.edu>
+    * DESCRIPTION (Version, Date): 0.01-11.
+    * R/Allclass: explicitly using setOldClass from methods:::
+    * prepare to release!
+
+
+
+2008-8-18  Ben Bolker <bolker@zoology.ufl.edu>
+    * DESCRIPTION (Version, Date): 0.01-10.
+    * R/jags:
+        1. change pos=parent.frame(1)
+        2. add envir=parent.frame(1) in data dumping
+
+
+2008-5-7  Yu-Sung Su     <ys463@columbia.edu>
+          Masanao Yajima <yajima@stat.columbia.edu>
+    * DESCRIPTION (Version, Date): 0.01-1.
