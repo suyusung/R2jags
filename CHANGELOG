@@ -1,10 +1,12 @@
+2016-9-2 Yu-Sung Su     <suyusung@tsinghua.edu.cn>
+      * DESCRIPTION: add BugReports and change LICENSE to GPL >=3
+
 2016-8-20 Yu-Sung Su <suyusung@tsinghua.edu.cn>
     * DESCRIPTION (Version, Date): 0.6-1
     * R/jagsParalle: add requireNamespace("coda")
 
-
 2015-8-22 Yu-Sung Su <suyusung@tsinghua.edu.cn>
-    * DESCRIPTION (Version, Date): 0.5-6
+    * DESCRIPTION (Version, Date): 0.5-7
     * NAMESPACE: add more import
     * R/jagsParalle: pass data into Glob.env
 
