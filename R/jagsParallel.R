@@ -61,7 +61,7 @@ jags.parallel <- function (data, inits, parameters.to.save, model.file = "model.
         return(jagsfit)
     }
     cl <- makeCluster(n.cluster, methods = FALSE)
-    clusterExport(cl, c(names(data), "mcmc", "mcmc.list", export_obj_names ), envir = envir)
+    clusterExport(cl, c(names(data), export_obj_names ), envir = envir)
     clusterSetRNGStream(cl, jags.seed)
     tryCatch(res <- clusterCall(cl, .runjags), finally = stopCluster(cl))
     result <- NULL
