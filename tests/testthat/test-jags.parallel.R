@@ -17,10 +17,25 @@ test_that("fewer cores than chains", {
       data,
       parameters.to.save = "beta",
       model.file = model_file,
-     n.chains = 4,
-     n.cluster = 2
+      n.chains = 4,
+      n.cluster = 2
     )
   )
+  last_values_1 <- unlist(out$BUGSoutput$last.values)
+  expect_equal(length(unique(last_values_1)), 4L)
   expect_true(inherits(out, "rjags"))
   expect_true(inherits(out$BUGSoutput, "bugs"))
+  tmp <- capture.output(
+    out <- jags.parallel(
+      data,
+      parameters.to.save = "beta",
+      model.file = model_file,
+      n.chains = 4,
+      n.cluster = 2
+    )
+  )
+  last_values_2 <- unlist(out$BUGSoutput$last.values)
+  expect_true(inherits(out, "rjags"))
+  expect_true(inherits(out$BUGSoutput, "bugs"))
+  expect_equal(last_values_1, last_values_2)
 })
