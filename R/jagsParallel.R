@@ -47,8 +47,9 @@ jags.parallel <- function (data, inits, parameters.to.save, model.file = "model.
 
 
 
-    .runjags <- function() {
+    .runjags <- function(seed) {
         requireNamespace("coda")
+        set.seed(seed)
         jagsfit <- jags(data = eval(expression(data)), inits = jags.inits,
             parameters.to.save = eval(expression(jags.params)),
             model.file = eval(expression(jags.model)), n.chains = 1,
@@ -62,8 +63,8 @@ jags.parallel <- function (data, inits, parameters.to.save, model.file = "model.
     }
     cl <- makeCluster(n.cluster, methods = FALSE)
     clusterExport(cl, c(names(data), "mcmc", "mcmc.list", export_obj_names ), envir = envir)
-    clusterSetRNGStream(cl, jags.seed)
-    tryCatch(res <- clusterCall(cl, .runjags), finally = stopCluster(cl))
+    seeds <- jags.seed + seq_len(n.chains)
+    tryCatch(res <- parLapply(cl = cl, X = seeds, fun = .runjags), finally = stopCluster(cl))
     result <- NULL
     model <- NULL
     for (ch in 1:n.chains) {
