@@ -96,7 +96,7 @@ jags <- function( data, inits,
   if(!is.null(jags.module)){
     n.module <- length(jags.module)
     for(m in 1:n.module){
-        load.module(jags.module[m])
+        load.module(jags.module[m], quiet = quiet)
     }
   }
 
