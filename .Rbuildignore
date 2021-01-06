@@ -1,0 +1,17 @@
+^.*code-workspace
+^.*\.gcda$
+^.*\.gcno$
+^.*\.log$
+^.*\.out$
+^.*\.Rout$
+^.*\.Rproj$
+^\.DS_Store
+^\.git$
+^\.github$
+^\.gitignore$
+^\.lintr$
+^\.Rapp.history$
+^\.Rbuildignore$
+^\.Rhistory$
+^\.Rproj\.user$
+^_pkgdown\.yml$
