@@ -128,7 +128,7 @@ jags.sims <- function (parameters.to.save, n.chains, n.iter, n.burnin, n.thin,
           summary.sd[[j]] <- summary[long.short[[j]], "sd"]
           summary.median[[j]] <- summary[long.short[[j]], "50%"]
       }
-      else {
+      else { 
         sims.list[[j]] <- array(sims[, long.short[[j]]], c(n.sims, rev(n.indexes.short[[j]])))#, c(1, (dimension.short[j] + 1):2))
         #sims.list[[j]] <- sims[, long.short[[j]]]
         summary.mean[[j]] <- array(summary[long.short[[j]],"mean"],n.indexes.short[[j]])
@@ -146,11 +146,12 @@ jags.sims <- function (parameters.to.save, n.chains, n.iter, n.burnin, n.thin,
 #              "50%"], rev(n.indexes.short[[j]])), temp2)
       }
   }
-  summary <- summary[rank.long, ]
+  
+  summary <- summary[rank.long,, drop = FALSE]
   all <- list(n.chains = n.chains, n.iter = n.iter, n.burnin = n.burnin, 
       n.thin = n.thin, n.keep = n.keep, n.sims = n.sims, sims.array = sims.array[, 
           , rank.long, drop = FALSE], sims.list = sims.list, 
-      sims.matrix = sims[, rank.long], summary = summary, mean = summary.mean, 
+      sims.matrix = sims[, rank.long, drop = FALSE], summary = summary, mean = summary.mean, 
       sd = summary.sd, median = summary.median, root.short = root.short, 
       long.short = long.short, dimension.short = dimension.short, 
       indexes.short = indexes.short, last.values = last.values)
