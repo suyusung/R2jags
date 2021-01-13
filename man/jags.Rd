@@ -24,7 +24,7 @@ jags(data, inits, parameters.to.save, model.file="model.bug",
   refresh = n.iter/50, progress.bar = "text", digits=5,
   RNGname = c("Wichmann-Hill", "Marsaglia-Multicarry",
               "Super-Duper", "Mersenne-Twister"),
-  jags.module = c("glm","dic")
+  jags.module = c("glm","dic"), quiet = FALSE
   )
 
 jags.parallel(data, inits, parameters.to.save, model.file = "model.bug",
@@ -107,7 +107,7 @@ jags2(data, inits, parameters.to.save, model.file="model.bug",
   \item{jags.module}{the vector of jags modules to be loaded.  Default are \dQuote{glm} and \dQuote{dic}. Input NULL if you don't want to load any jags module.}
   \item{export_obj_names}{character vector of objects to export to the clusters.}
   \item{envir}{default is .GlobalEnv}
-
+  \item{quiet}{Logical, whether to suppress stdout in \code{jags.model()}.}
 }
 
 

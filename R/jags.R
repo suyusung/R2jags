@@ -12,7 +12,8 @@ jags <- function( data, inits,
                   progress.bar = "text",
                   digits = 5,
                   RNGname = c("Wichmann-Hill", "Marsaglia-Multicarry", "Super-Duper", "Mersenne-Twister"),
-                  jags.module = c("glm","dic")
+                  jags.module = c("glm","dic"),
+                  quiet = FALSE
                   )
 {
   #require( rjags )
@@ -95,7 +96,7 @@ jags <- function( data, inits,
   if(!is.null(jags.module)){
     n.module <- length(jags.module)
     for(m in 1:n.module){
-        load.module(jags.module[m])
+        load.module(jags.module[m], quiet = quiet)
     }
   }
 
@@ -152,7 +153,8 @@ jags <- function( data, inits,
                   data     = data,
                   inits    = init.values,
                   n.chains = n.chains,
-                  n.adapt  = 0 )
+                  n.adapt  = 0,
+                  quiet = quiet )
   #}
   adapt( m,
          n.iter         = n.adapt,
