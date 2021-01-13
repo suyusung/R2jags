@@ -146,11 +146,12 @@ as.bugs.array2 <- function(sims.array, model.file=NULL, program="jags",
 #      summary.975[[j]] <- array(summary[long.short[[j]],"97.5%"],n.indexes.short[[j]])
     }
   }
-  summary <- summary[rank.long, ]
+
+  summary <- summary[rank.long,, drop = FALSE]
   #all <- list(n.chains = n.chains, n.iter = n.iter, n.burnin = n.burnin,
 #        n.thin = n.thin, n.keep = n.keep, n.sims = n.sims,
 #        sims.array = sims.array[, , rank.long, drop = FALSE], sims.list = sims.list,
-#        sims.matrix = sims[, rank.long], summary = summary, mean = summary.mean,
+#        sims.matrix = sims[, rank.long, drop = FALSE], summary = summary, mean = summary.mean,
 #        sd = summary.sd, median = summary.median, root.short = root.short,
 #        long.short = long.short, dimension.short = dimension.short,
 #        indexes.short = indexes.short, last.values = last.values,
@@ -158,8 +159,8 @@ as.bugs.array2 <- function(sims.array, model.file=NULL, program="jags",
 
   all <- list(n.chains = n.chains, n.iter = n.iter, n.burnin = n.burnin,
       n.thin = n.thin, n.keep = n.keep, n.sims = n.sims,
-      sims.array = sims.array[,,rank.long,drop = FALSE], sims.list = sims.list,
-      sims.matrix = sims[, rank.long], summary = summary, mean = summary.mean,
+      sims.array = sims.array[,,rank.long, drop = FALSE], sims.list = sims.list,
+      sims.matrix = sims[, rank.long, drop = FALSE], summary = summary, mean = summary.mean,
       sd = summary.sd, median = summary.median, root.short = root.short,
       long.short = long.short, dimension.short = dimension.short,
       indexes.short = indexes.short, last.values = last.values, program=program,
