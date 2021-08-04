@@ -7,8 +7,8 @@ print.rjags <- function(x, digits = 3,
   sd.vect <- apply(sims.matrix, 2, sd)
   int.matrix <- apply(sims.matrix, 2, quantile, intervals)
   if (x$n.chains>1) {
-    n.eff <- x$summary[,"n.eff"]
-    Rhat <- x$summary[,"Rhat"] 
+    n.eff <- x$summary[, "n.eff"]
+    Rhat <- x$summary[, "Rhat"] 
   } else {
     n.eff <- Rhat <- NULL
   }
