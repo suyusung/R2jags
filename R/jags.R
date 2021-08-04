@@ -93,9 +93,9 @@ jags <- function( data, inits,
 
 
   #load.module("lecuyer")
-  if(!is.null(jags.module)){
+  if(length(jags.module) > 0L) {
     n.module <- length(jags.module)
-    for(m in 1:n.module){
+    for(m in seq_len(n.module)) {
         load.module(jags.module[m], quiet = quiet)
     }
   }
