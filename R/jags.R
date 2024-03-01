@@ -58,7 +58,7 @@ jags <- function( data, inits,
   ## copied from R2WinBUGS:
   if (is.function(model.file)) {
     temp <- tempfile("model")
-    temp <- if (is.R() || .Platform$OS.type != "windows") {
+    temp <- if (.Platform$OS.type != "windows") {
       paste(temp, "txt", sep = ".")
     }
     else {
@@ -66,8 +66,6 @@ jags <- function( data, inits,
     }
     write.model(model.file, con = temp, digits = digits) ## from R2WinBUGS
     model.file <- gsub("\\\\", "/", temp)
-    if (!is.R())
-      on.exit(file.remove(model.file), add = TRUE)
   }
   if( DIC ){
     parameters.to.save <- c( parameters.to.save, "deviance" )

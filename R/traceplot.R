@@ -7,7 +7,7 @@ if (!isGeneric("traceplot")) {
                function(x, ...)
                standardGeneric("traceplot"),
                 useAsDefault = function(x, ...) coda::traceplot(x, ...))
-} 
+}
 
 
 #ttraceplot.default <- function(x, ...) coda::traceplot
@@ -19,22 +19,22 @@ if (!isGeneric("traceplot")) {
 
 
 setMethod("traceplot", signature(x = "mcmc.list"),
-  function (x, smooth = TRUE, col = 1:6, type = "l", ylab = "", ...) 
+  function (x, smooth = TRUE, col = 1:6, type = "l", ylab = "", ...)
 {
   args <- list(...)
   for (j in 1:nvar(x)) {
     xp <- as.vector(time(x))
-    yp <- if (nvar(x) > 1) 
+    yp <- if (nvar(x) > 1)
         x[, j, drop = TRUE]
     else x
     yp <- do.call("cbind", yp)
-    matplot(xp, yp, xlab = "Iterations", ylab = ylab, type = type, 
+    matplot(xp, yp, xlab = "Iterations", ylab = ylab, type = type,
         col = col, ...)
-    if (!is.null(varnames(x)) && is.null(list(...)$main)) 
+    if (!is.null(varnames(x)) && is.null(list(...)$main))
       title(paste("Trace of", varnames(x)[j]))
     if (smooth) {
       scol <- rep(col, length = nchain(x))
-      for (k in 1:nchain(x)) lines(lowess(xp, yp[, k]), 
+      for (k in 1:nchain(x)) lines(lowess(xp, yp[, k]),
         col = scol[k])
     }
   }
@@ -47,7 +47,7 @@ setMethod("traceplot", signature(x = "rjags"),
   function( x, mfrow = c( 1, 1 ), varname = NULL,
   match.head = TRUE, ask = TRUE,
   col = rainbow( x$n.chains ),
-  lty = 1, lwd = 1, ... ) 
+  lty = 1, lwd = 1, ... )
 {
   x <- x$BUGSoutput
   op <- par()$ask
@@ -83,7 +83,7 @@ setMethod("traceplot", signature(x = "bugs"),
   function( x, mfrow = c( 1, 1 ), varname = NULL,
   match.head = TRUE, ask = TRUE,
   col = rainbow( x$n.chains ),
-  lty = 1, lwd = 1, ... ) 
+  lty = 1, lwd = 1, ... )
 {
   par( mfrow = mfrow )
   par( ask = ask )
