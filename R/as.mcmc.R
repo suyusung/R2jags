@@ -4,7 +4,7 @@ as.mcmc.rjags <- function (x, ...) {
   x <- x$BUGSoutput
   mclist <- vector("list", x$n.chains)
   mclis <- vector("list", x$n.chains)
-  strt <- x$n.burnin + 1
+  strt <- x$n.burnin + x$n.thin
   end <- x$n.iter
   ord <- order(dimnames(x$sims.array)[[3]])
   for (i in 1:x$n.chains) {
