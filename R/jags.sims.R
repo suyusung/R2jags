@@ -22,8 +22,7 @@
 
 
 
-jags.sims <- function (parameters.to.save, n.chains, n.iter, n.burnin, n.thin,
-  DIC = TRUE)
+jags.sims <- function (parameters.to.save, n.chains, n.iter, n.burnin, n.thin, DIC = TRUE)
 {
 
   #require(R2WinBUGS)
@@ -46,8 +45,7 @@ jags.sims <- function (parameters.to.save, n.chains, n.iter, n.burnin, n.thin,
   left.bracket.short <- as.vector(regexpr("[[]", parameters.to.save))
   right.bracket.short <- as.vector(regexpr("[]]", parameters.to.save))
   root.short <- ifelse(left.bracket.short == -1, parameters.to.save,
-      substring(parameters.to.save, 1, left.bracket.short -
-          1))
+      substring(parameters.to.save, 1, left.bracket.short - 1))
   dimension.short <- rep(0, n.roots)
   indexes.short <- vector(n.roots, mode = "list")
   n.indexes.short <- vector(n.roots, mode = "list")
@@ -107,8 +105,7 @@ jags.sims <- function (parameters.to.save, n.chains, n.iter, n.burnin, n.thin,
       }
   }
   sims <- sims[sample(n.sims), , drop = FALSE]
-  sims.list <- summary.mean <- summary.sd <- summary.median <- vector(n.roots,
-      mode = "list")
+  sims.list <- summary.mean <- summary.sd <- summary.median <- vector(n.roots,mode = "list")
   names(sims.list) <- names(summary.mean) <- names(summary.sd) <- names(summary.median) <- root.short
   for (j in 1:n.roots) {
       if (length.short[j] == 1) {

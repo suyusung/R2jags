@@ -166,7 +166,6 @@ jags <- function( data, inits,
                            thin           = n.thin,
                            by             = refresh,
                            progress.bar   = progress.bar )
-
   fit <- mcmc2bugs( samples,
                     model.file = model.file,
                     program    = "jags",

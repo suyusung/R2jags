@@ -137,13 +137,23 @@ as.bugs.array2 <- function(sims.array, model.file=NULL, program="jags",
       ##fix this list
       #sims.list[[j]] <- aperm(array(sims[, long.short[[j]]], c(n.sims, rev(n.indexes.short[[j]]))), c(1, (dimension.short[j] + 1):2))
       sims.list[[j]] <- array(sims[, long.short[[j]]], c(n.sims, n.indexes.short[[j]]))
+      # this is a quick fix to the case where elements in levels are missing, ie empty cells in a parameter matrix 2024.3.31
+      # the code is ugly. need to fix in the future.  Add two hiddent functions below in the end of the page
+      missingCell <- .checkEmptyCell(n.indexes.short[[j]], long.short[[j]], parameter.names)
+      if(length(missingCell)>1){
+        for(s in 1:n.sims){
+            sims.list[[j]][s,,][missingCell] <- NA
+        }
+      }
       #sims.list[[j]] <- sims[, long.short[[j]]]
       summary.mean[[j]] <- array(summary[long.short[[j]],"mean"],n.indexes.short[[j]])
       summary.sd[[j]] <- array(summary[long.short[[j]],"sd"],n.indexes.short[[j]])
       summary.median[[j]] <- array(summary[long.short[[j]],"50%"],n.indexes.short[[j]])
+      
       ##ell: added 025 and 975
 #      summary.025[[j]] <- array(summary[long.short[[j]],"2.5%"],n.indexes.short[[j]])
 #      summary.975[[j]] <- array(summary[long.short[[j]],"97.5%"],n.indexes.short[[j]])
+        
     }
   }
 
@@ -188,3 +198,28 @@ as.bugs.array2 <- function(sims.array, model.file=NULL, program="jags",
   class(all) <- "bugs"
   all
 }
+
+
+.checkEmptyCell <- function(n.indexes.short, long.short, parameter.names){
+    size1 <- prod(n.indexes.short)
+    size2 <- length(long.short)
+    if(size1 > size2){
+        paraNames <- parameter.names[long.short]
+        indices <- t(sapply(paraNames, .extract_indices))
+        paramMatrix <- matrix(FALSE, nrow = n.indexes.short[1], ncol = n.indexes.short[2])
+        paramMatrix[indices] <- TRUE
+        missingCell <- which(!paramMatrix, arr.ind = TRUE) 
+    }else{
+        missingCell <- NA
+    }
+    return(missingCell)
+}
+
+.extract_indices <- function(parameter.names) {
+  indices <- gsub("\\D", "", parameter.names) # Extract only digits
+  indices <- as.numeric(unlist(strsplit(indices, ""))) # Split into individual digits and convert to numeric
+  return(indices)
+}
+
+
+
