@@ -115,7 +115,7 @@ jags2(data, inits, parameters.to.save, model.file="model.bug",
 \details{
   To run:
   \enumerate{
-    \item Write a \code{BUGS} model in an ASCII file.
+    \item Write a \code{JAGS} model in an ASCII file.
     \item Go into \R.
     \item Prepare the inputs for the \code{jags} function and run it (see
       Example section).
@@ -123,22 +123,22 @@ jags2(data, inits, parameters.to.save, model.file="model.bug",
       will see things happening in the R console.
   }
 
-  BUGS version support:
-  \itemize{
-    \item{\pkg{jags} 1.0.3}{default}
-  }
+%  BUGS version support:
+%  \itemize{
+%    \item \pkg{jags} 1.0.3 {default}
+% }
 }
 
 \author{
   Yu-Sung Su \email{suyusung@tsinghua.edu.cn},
-  Masanao Yajima \email{yajima@stat.columbia.edu}
+  Masanao Yajima \email{yajima@bu.edu}
 }
 
 
 \references{
     Plummer, Martyn (2003)
     \dQuote{JAGS: A program for analysis of Bayesian graphical models using Gibbs sampling.}
-    \url{http://citeseer.ist.psu.edu/plummer03jags.html}.
+    \url{https://www.r-project.org/conferences/DSC-2003/Proceedings/Plummer.pdf}.
 
     Gelman, A., Carlin, J. B., Stern, H.S., Rubin, D.B. (2003)
     \emph{Bayesian Data Analysis}, 2nd edition, CRC Press.
