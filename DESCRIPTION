@@ -1,13 +1,13 @@
 Package: R2jags
-Version: 0.8-2
-Date: 2024-03-31
+Version: 0.8-3
+Date: 2024-04-01
 Title: Using R to Run 'JAGS'
-Authors@R: c(person("Yu-Sung", "Su", role = c("cre","aut"),
+Authors@R: c(person("Yu-Sung", "Su", role =  c("aut", "cre"), 
 		email = "suyusung@tsinghua.edu.cn", 
 		comment = c(ORCID = "0000-0001-5021-8209")),
 	     person("Masanao", "Yajima", email = "yajima@bu.edu", role = "aut")
 		)
-Author: Yu-Sung Su [cre, aut] (<https://orcid.org/0000-0001-5021-8209>),
+Author: Yu-Sung Su [aut, cre] (<https://orcid.org/0000-0001-5021-8209>),
         Masanao Yajima [aut]
 Maintainer: Yu-Sung Su <suyusung@tsinghua.edu.cn>
 BugReports: https://github.com/suyusung/R2jags/issues/
