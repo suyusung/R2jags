@@ -24,7 +24,8 @@ jags(data, inits, parameters.to.save, model.file="model.bug",
   refresh = n.iter/50, progress.bar = "text", digits=5,
   RNGname = c("Wichmann-Hill", "Marsaglia-Multicarry",
               "Super-Duper", "Mersenne-Twister"),
-  jags.module = c("glm","dic"), quiet = FALSE
+  jags.module = c("glm","dic"), quiet = FALSE,
+  checkMissing = FALSE
   )
 
 jags.parallel(data, inits, parameters.to.save, model.file = "model.bug",
@@ -108,6 +109,8 @@ jags2(data, inits, parameters.to.save, model.file="model.bug",
   \item{export_obj_names}{character vector of objects to export to the clusters.}
   \item{envir}{default is .GlobalEnv}
   \item{quiet}{Logical, whether to suppress stdout in \code{jags.model()}.}
+  \item{checkMissing}{Default: FALSE. When TRUE, checks for missing data in categorical parameters 
+  and returns a \code{sim.list} with NA values if detected. It's recommended to supply \code{jags()} with complete data.}
 }
 
 

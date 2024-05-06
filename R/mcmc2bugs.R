@@ -1,6 +1,6 @@
 
 mcmc2bugs <- function(x, model.file = NULL, program = "", DIC = FALSE, 
-  DICOutput = NULL, n.iter = NULL, n.burnin = 0, n.thin = 1){
+  DICOutput = NULL, n.iter = NULL, n.burnin = 0, n.thin = 1, checkMissing=FALSE){
   parameter.names <- dimnames(x[[1]])[[2]]
   n.keeps <- dim(x[[1]])[1]
   n.chains <- summary(x)[["nchain"]]

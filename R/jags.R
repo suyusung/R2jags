@@ -13,7 +13,8 @@ jags <- function( data, inits,
                   digits = 5,
                   RNGname = c("Wichmann-Hill", "Marsaglia-Multicarry", "Super-Duper", "Mersenne-Twister"),
                   jags.module = c("glm","dic"),
-                  quiet = FALSE
+                  quiet = FALSE,
+                  checkMissing = FALSE
                   )
 {
   #require( rjags )
@@ -173,7 +174,8 @@ jags <- function( data, inits,
                     DICOutput  = NULL,
                     n.iter     = n.iter,
                     n.burnin   = n.burnin,
-                    n.thin     = n.thin )
+                    n.thin     = n.thin,
+                    checkMissing = checkMissing )
 
   out <- list( model              = m,
                BUGSoutput         = fit,

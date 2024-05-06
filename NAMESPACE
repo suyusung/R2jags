@@ -16,6 +16,8 @@ importFrom(abind, "abind")
 
 importFrom(coda, "as.mcmc", "mcmc", "nvar", "varnames", "nchain", "as.mcmc.list", "traceplot")
 
+importFrom(stringr, "str_match")
+
 import(parallel)
 
 importFrom(R2WinBUGS, "attach.bugs",

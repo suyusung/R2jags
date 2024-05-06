@@ -1,7 +1,18 @@
-2024-03-31 Yu-Sung Su     <suyusung@tsinghua.edu.cn>
-    * DESCRIPTION (Version, Date): 0.8-2
+2024-05-4  Yu-Sung Su     <suyusung@tsinghua.edu.cn>
+    * DESCRIPTION (Version, Date): 0.8-5
     * incorporate patches suggested by CRAN
+    * R/jags: add new parameter checkMissing = FALSE
+    * R/mcmc2bugs: add new parameter checkMissing = FALSE
     * R/as.bugs.array2: add a patch to cases where levels of categorical variables have missing.
+        1. add new parameter checkMissing = FALSE, When set to TRUE, this option will verify the 
+            presence of missing data within the parameters, typically focusing on categorical 
+            variables or levels within Multilevel Models (MLM). If missing data is detected, 
+            the function will attempt to return a sim.list object containing NA values to 
+            indicate the missingness. It is generally advised against enabling this option. 
+            Instead, it is recommended to ensure that all variables provided to the jags() 
+            function are free from missing data before proceeding with the analysis.
+        2. it will now spell out warning message when categorical variables with missing data, users
+            should be careful about the output results.
     * NAMESPACE: fix issues between Author and Authro@R
 
 2021-08-05 Yu-Sung Su     <suyusung@tsinghua.edu.cn>

@@ -1,5 +1,5 @@
 as.bugs.array2 <- function(sims.array, model.file=NULL, program="jags",
-              DIC=FALSE, DICOutput=NULL, n.iter=NULL, n.burnin=0, n.thin=1)
+              DIC=FALSE, DICOutput=NULL, n.iter=NULL, n.burnin=0, n.thin=1, checkMissing=FALSE)
 {
   ## 'sims.array' is supposed to be a 3-way array with
   # n.sims*n.chains*n.parameters simulations, and
@@ -59,10 +59,9 @@ as.bugs.array2 <- function(sims.array, model.file=NULL, program="jags",
           ## this check fails if you take out a part of the simulations
           ## (for example, you don't want the array to have some of the
           ## parameters) so I took them out.
-
-          ## if (length(long.short[[j]]) != length.short[j])
-          ##   stop(paste("error in parameter", root.short[[j]],
-          ##   "in parameters.to.save"))
+           if (length(long.short[[j]]) != length.short[j]){
+             warning(paste("error/missing in parameter", root.short[[j]],"in parameters.to.save, \n   Be aware of the output results.\n"), noBreaks.=TRUE)
+           }
           indexes.short[[j]] <- as.list(numeric(length.short[j]))
           for (k in 1:length.short[j]){
             indexes.short[[j]][[k]] <- indexes.long[[long.short[[j]][k]]]
@@ -137,13 +136,16 @@ as.bugs.array2 <- function(sims.array, model.file=NULL, program="jags",
       ##fix this list
       #sims.list[[j]] <- aperm(array(sims[, long.short[[j]]], c(n.sims, rev(n.indexes.short[[j]]))), c(1, (dimension.short[j] + 1):2))
       sims.list[[j]] <- array(sims[, long.short[[j]]], c(n.sims, n.indexes.short[[j]]))
+
       # this is a quick fix to the case where elements in levels are missing, ie empty cells in a parameter matrix 2024.3.31
       # the code is ugly. need to fix in the future.  Add two hiddent functions below in the end of the page
-      missingCell <- .checkEmptyCell(n.indexes.short[[j]], long.short[[j]], parameter.names)
-      if(length(missingCell)>1){
-        for(s in 1:n.sims){
-            sims.list[[j]][s,,][missingCell] <- NA
-        }
+      if(checkMissing){
+          missingCell <- .checkEmptyCell(n.indexes.short[[j]], long.short[[j]], parameter.names)
+          if(length(missingCell)>1){
+            for(s in 1:n.sims){
+                sims.list[[j]][s,,][missingCell] <- NA
+            }
+          }
       }
       #sims.list[[j]] <- sims[, long.short[[j]]]
       summary.mean[[j]] <- array(summary[long.short[[j]],"mean"],n.indexes.short[[j]])
@@ -205,7 +207,8 @@ as.bugs.array2 <- function(sims.array, model.file=NULL, program="jags",
     size2 <- length(long.short)
     if(size1 > size2){
         paraNames <- parameter.names[long.short]
-        indices <- t(sapply(paraNames, .extract_indices))
+        indicesLst <- lapply(paraNames, .extract_indices)
+        indices <- do.call(rbind, indicesLst)
         paramMatrix <- matrix(FALSE, nrow = n.indexes.short[1], ncol = n.indexes.short[2])
         paramMatrix[indices] <- TRUE
         missingCell <- which(!paramMatrix, arr.ind = TRUE) 
@@ -216,8 +219,13 @@ as.bugs.array2 <- function(sims.array, model.file=NULL, program="jags",
 }
 
 .extract_indices <- function(parameter.names) {
-  indices <- gsub("\\D", "", parameter.names) # Extract only digits
-  indices <- as.numeric(unlist(strsplit(indices, ""))) # Split into individual digits and convert to numeric
+  #indices <-  gregexpr("\\d+", parameter.names)[[1]]
+  #indices <- as.numeric(indices)
+  #indices <- gsub("\\d+", "", parameter.names) # Extract only digits
+  #indices <- as.numeric(indices)) # Split into individual digits and convert to numeric
+  indices <- str_match(parameter.names, "\\[(\\d+),(\\d+)\\]")[,-1]
+  indices <- matrix(as.numeric(indices), ncol = 2, byrow = TRUE)
+  #indices <- as.numeric(indices)
   return(indices)
 }
 
