@@ -1,3 +1,17 @@
+2024-06-22 Gianluca Baio <g.baio@ucl.ac.uk>
+   * DESCRIPTION (Date): 2024-06-22
+   * DESCRIPTION (Authors): Add GB's contributions
+   * R/jags.R: Fix a major bug. Currently, there's effectively no burnin phase, because what is 
+     supposed to be that, is just an adaptation phase, which doesn't store the burnin samples.
+     Thus, at present, the saved simulations may not be after convergence, with the undesired
+     effect that some model actually haven't converged. In addition, changes the terminology
+     and rename the object 'pD' to 'pV' (because the default JAGS computation is that...).
+     Also, adds the possibility of computing the proper 'pD', via 'rjags::dic.samples()'
+   * R/jags.sims.R: Matches the renaming of 'pD' into 'pV', throughout.
+   * R/print.R: Matches the renaming of 'pD' into 'pV', throughout and adds the possibility
+     of printing the value of 'pD' too, if it's added to the JAGS object
+   * man/jags.Rd: update with three new options
+
 2024-05-4  Yu-Sung Su     <suyusung@tsinghua.edu.cn>
     * DESCRIPTION (Version, Date): 0.8-5
     * incorporate patches suggested by CRAN

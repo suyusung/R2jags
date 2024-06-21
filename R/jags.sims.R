@@ -145,13 +145,14 @@ jags.sims <- function (parameters.to.save, n.chains, n.iter, n.burnin, n.thin, D
     deviance <- all$sims.array[, , "deviance", drop = FALSE]
     dimnames(deviance) <- NULL
     dim(deviance) <- dim(deviance)[1:2]
-    pD <- numeric(n.chains)
+# Modified by GB to change pD to pV
+    pV <- numeric(n.chains)
     DIC <- numeric(n.chains)
     for (i in 1:n.chains) {
-      pD[i] <- var(deviance[, i])/2
-      DIC[i] <- mean(deviance[, i]) + pD[i]
+      pV[i] <- var(deviance[, i])/2
+      DIC[i] <- mean(deviance[, i]) + pV[i]
     }
-    all <- c(all, list(isDIC = TRUE, DICbyR = TRUE, pD = mean(pD),
+    all <- c(all, list(isDIC = TRUE, DICbyR = TRUE, pV = mean(pV),
                 DIC = mean(DIC)))
   }
   else {

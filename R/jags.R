@@ -1,3 +1,4 @@
+# New version edited by GB to fix bugs and make nicer output
 jags <- function( data, inits,
                   parameters.to.save,
                   model.file  = "model.bug",
@@ -6,6 +7,9 @@ jags <- function( data, inits,
                   n.burnin     = floor(n.iter/2),
                   n.thin       = max( 1, floor( ( n.iter - n.burnin )/1000 ) ),
                   DIC          = TRUE,
+                  pD           = FALSE,
+                  n.iter.pd    = NULL,
+                  n.adapt      = 0,
                   working.directory = NULL,
                   jags.seed    = 123,
                   refresh      = n.iter/50,
@@ -18,6 +22,9 @@ jags <- function( data, inits,
                   )
 {
   #require( rjags )
+  #' GB: starts the clock to record the running time
+  tic <- proc.time()
+
   if( !is.null( working.directory ) ){
     working.directory <- path.expand( working.directory )
     savedWD <- getwd()
@@ -73,11 +80,7 @@ jags <- function( data, inits,
     load.module( "dic", quiet = TRUE )
   }
 
-  if( n.burnin > 0 ){
-    n.adapt <- n.burnin
-  } else{
-    n.adapt <- 100
-  }
+
 
   if (!missing(inits) && !is.function(inits) && !is.null(inits) && (length(inits) != n.chains)) {
     stop("Number of initialized chains (length(inits)) != n.chains")
@@ -140,33 +143,46 @@ jags <- function( data, inits,
     }
    }
 
-
-#  if( is.null( inits ) ){
-#    m <- jags.model( model.file,
-#                     data     = data,
-#                     n.chains = n.chains,
-#                     n.adapt  = 0 )
-#  } else{
-
+  # Compiles the model object
   m <- jags.model(model.file,
                   data     = data,
                   inits    = init.values,
                   n.chains = n.chains,
-                  n.adapt  = 0,
+                  n.adapt  = n.adapt,
                   quiet = quiet )
-  #}
-  adapt( m,
-         n.iter         = n.adapt,
-         by             = refresh,
-         progress.bar   = progress.bar,
-         end.adaptation = TRUE )
 
+  # Updates the model for the burning phase
+  rjags:::update.jags(
+    m,
+    n.iter=n.burnin,
+    n.thin=n.thin,
+    by=refresh,
+    progress.bar=progress.bar
+  )
+
+  # Now saves the samples after burnin
   samples <- coda.samples( model          = m,
                            variable.names = parameters.to.save,
                            n.iter         = ( n.iter - n.burnin ),
                            thin           = n.thin,
                            by             = refresh,
                            progress.bar   = progress.bar )
+
+  #' GB: Add call to 'rjags::dic.samples()' to add pD if the argument 'pD' is
+  #' set to TRUE in the call to 'jags'
+  if(pD) {
+    if (is.null(n.iter.pd)) {n.iter.pd <- 1000}
+    pDstuff <- rjags::dic.samples(
+      model=m, n.iter=n.iter.pd, progress.bar="none", quiet=TRUE
+    )
+   pD <- sum(pDstuff$penalty)
+   DIC2 <- sum(pDstuff$deviance) + pD
+  }
+
+  #' GB: stops the clock and records the running time
+  toc <- proc.time()-tic
+  names(toc)[3] <- "Running time (secs)"
+
   fit <- mcmc2bugs( samples,
                     model.file = model.file,
                     program    = "jags",
@@ -175,7 +191,15 @@ jags <- function( data, inits,
                     n.iter     = n.iter,
                     n.burnin   = n.burnin,
                     n.thin     = n.thin,
-                    checkMissing = checkMissing )
+                    checkMissing = checkMissing)
+  #' GB: adds the running time to the 'fit' object (which will then be
+  #' renamed as 'BUGSoutput)
+  fit$time2run <- toc[3]
+  #' GB: *If it exists*, adds the pD and the resulting DIC to the 'fit' object
+  if(pD) {
+    fit$pD <- pD
+    fit$DIC2 <- DIC2
+  }
 
   out <- list( model              = m,
                BUGSoutput         = fit,
