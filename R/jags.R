@@ -159,7 +159,7 @@ jags <- function( data, inits,
   adapt(m,n.iter=n.adapt,progress.bar=progress.bar,quiet=quiet,end.adaptation=TRUE)
 
   # Adds adaptation
-  adapt(m,n.iter=n.adapt,end.adaptation=TRUE)
+  adapt(m,n.iter=n.adapt,quiet=TRUE, progress.bar=progress.bar, end.adaptation=TRUE)
   
   # Updates the model for the burning phase
   .update.jags( 
@@ -167,7 +167,8 @@ jags <- function( data, inits,
     n.iter=n.burnin,
     n.thin=n.thin,
     by=refresh,
-    progress.bar=progress.bar
+    progress.bar=progress.bar,
+    quiet = quiet
   )
 
   # Now saves the samples after burnin
@@ -176,6 +177,7 @@ jags <- function( data, inits,
                            n.iter         = ( n.iter - n.burnin ),
                            thin           = n.thin,
                            by             = refresh,
+                           quiet          = quiet,
                            progress.bar   = progress.bar )
 
   #' GB: Add call to 'rjags::dic.samples()' to add pD if the argument 'pD' is
