@@ -152,7 +152,7 @@ jags <- function( data, inits,
                   quiet = quiet )
   
   # Adds adaptation, just in case...
-  adapt(m,n.iter=n.adapt,end.adaptation=TRUE)
+  adapt(m,n.iter=n.adapt,progress.bar=progress.bar,quiet=quiet,end.adaptation=TRUE)
 
   # Updates the model for the burning phase
   rjags:::update.jags(
