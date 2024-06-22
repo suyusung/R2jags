@@ -97,4 +97,3 @@ print.rjags <- function(x, digits = 3,
 #    invisible(x)
 #}
 #
->>>>>>> a8e7728 (Fix print table to also show the running time)
