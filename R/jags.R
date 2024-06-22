@@ -9,7 +9,7 @@ jags <- function( data, inits,
                   DIC          = TRUE,
                   pD           = FALSE,
                   n.iter.pd    = NULL,
-                  n.adapt      = 0,
+                  n.adapt      = 100,
                   working.directory = NULL,
                   jags.seed    = 123,
                   refresh      = n.iter/50,
@@ -148,8 +148,11 @@ jags <- function( data, inits,
                   data     = data,
                   inits    = init.values,
                   n.chains = n.chains,
-                  n.adapt  = n.adapt,
+                  n.adapt  = 0,
                   quiet = quiet )
+  
+  # Adds adaptation, just in case...
+  adapt(m,n.iter=n.adapt,end.adaptation=TRUE)
 
   # Updates the model for the burning phase
   rjags:::update.jags(

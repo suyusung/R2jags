@@ -30,7 +30,7 @@ print.rjags <- function(x, digits = 3,
       x$n.burnin, " discarded)", sep = "")
   if (x$n.thin > 1) 
       cat(", n.thin =", x$n.thin)
-  cat("\n n.sims =", x$n.sims, "iterations saved. Running time =",x$time2run," secs\n")
+  cat("\n n.sims =", x$n.sims, "iterations saved. Running time =",x$time2run,"secs\n")
   print(round(summaryMatrix, digits), ...)
   if (x$n.chains > 1) {
       cat("\nFor each parameter, n.eff is a crude measure of effective sample size,")

@@ -91,7 +91,7 @@ jags2(data, inits, parameters.to.save, model.file="model.bug",
   \item{n.iter.pd}{number of iterations to feed 'rjags::dic.samples()' to
     compute 'pD'. Defaults at 1000.}
   \item{n.adapt}{number of iterations for which to run the adaptation, when
-    creating the model object. Defaults at 0 (which means no adaptation).}
+    creating the model object. Defaults at 100.}
   \item{working.directory}{sets working directory during execution of
     this function; This should be the directory where model file is.}
   \item{jags.seed}{random seed for \code{JAGS}, default is 123.  This function is used for jags.parallell() and does not work for jags().  Use set.seed() instead if you want to produce identical result with jags() }.
