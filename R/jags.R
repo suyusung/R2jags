@@ -1,3 +1,8 @@
+# YS 2024.6.23
+# better way to get the internal function update.jags from rjags package.
+# ::: simply doesn't work.
+.update.jags <- get("update.jags", envir = asNamespace("rjags"))
+
 # New version edited by GB to fix bugs and make nicer output
 jags <- function( data, inits,
                   parameters.to.save,
@@ -155,7 +160,7 @@ jags <- function( data, inits,
   adapt(m,n.iter=n.adapt,progress.bar=progress.bar,quiet=quiet,end.adaptation=TRUE)
 
   # Updates the model for the burning phase
-  rjags:::update.jags(
+  .update.jags(   
     m,
     n.iter=n.burnin,
     n.thin=n.thin,
