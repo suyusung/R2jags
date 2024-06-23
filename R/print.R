@@ -30,22 +30,29 @@ print.rjags <- function(x, digits = 3,
       x$n.burnin, " discarded)", sep = "")
   if (x$n.thin > 1) 
       cat(", n.thin =", x$n.thin)
-  cat("\n n.sims =", x$n.sims, "iterations saved\n")
+  cat("\n n.sims =", x$n.sims, "iterations saved. Running time =",x$time2run,"secs\n")
   print(round(summaryMatrix, digits), ...)
   if (x$n.chains > 1) {
       cat("\nFor each parameter, n.eff is a crude measure of effective sample size,")
       cat("\nand Rhat is the potential scale reduction factor (at convergence, Rhat=1).\n")
   }
+  #' GB: Can modify this to correctly report the penalty as 'pV', which it is.
+  #' In reality, there's no need for the multiple option (which would compute
+  #' pD as BUGS does), because, JAGS doesn't do that...
   if (x$isDIC) {
-      msgDICRule <- ifelse(x$DICbyR, "(using the rule, pD = var(deviance)/2)", 
+      msgDICRule <- ifelse(x$DICbyR, "(using the rule: pV = var(deviance)/2)",
           "(using the rule, pD = Dbar-Dhat)")
       cat(paste("\nDIC info ", msgDICRule, "\n", sep = ""))
       if (length(x$DIC) == 1) {
-          cat("pD =", fround(x$pD, 1), "and DIC =", fround(x$DIC, 
-              1))
+          cat("pV =", fround(x$pV, 1), "and DIC =", fround(x$DIC, 1))
       }
       else if (length(x$DIC) > 1) {
           print(round(x$DIC, 1))
+      }
+      #' GB: If pD has also been monitored, then print it alongside pV
+      if (!is.null(x$pD)) {
+        cat("\nDIC info (using the rule: pD = Dbar-Dhat, computed via 'rjags::dic.samples')")
+        cat(paste("\npD =", fround(x$pD, 1), "and DIC =", fround(x$DIC2, 1)))
       }
       cat("\nDIC is an estimate of expected predictive error (lower deviance is better).\n")
   }

@@ -85,6 +85,13 @@ jags2(data, inits, parameters.to.save, model.file="model.bug",
 %          iterations and then the adaptive mode is switched off.}
   \item{DIC}{logical; if \code{TRUE} (default), compute deviance, pD,
     and DIC. The rule \code{pD=var(deviance) / 2} is used.}
+  \item{pD}{logical; if \code{TRUE} and \code{DIC} is also \code{TRUE}, then
+    adds the computation of 'pD', using 'rjags::dic.samples()'. Defaults to
+    \code{FALSE}.}
+  \item{n.iter.pd}{number of iterations to feed 'rjags::dic.samples()' to
+    compute 'pD'. Defaults at 1000.}
+  \item{n.adapt}{number of iterations for which to run the adaptation, when
+    creating the model object. Defaults at 100.}
   \item{working.directory}{sets working directory during execution of
     this function; This should be the directory where model file is.}
   \item{jags.seed}{random seed for \code{JAGS}, default is 123.  This function is used for jags.parallell() and does not work for jags().  Use set.seed() instead if you want to produce identical result with jags() }.
@@ -134,7 +141,8 @@ jags2(data, inits, parameters.to.save, model.file="model.bug",
 
 \author{
   Yu-Sung Su \email{suyusung@tsinghua.edu.cn},
-  Masanao Yajima \email{yajima@bu.edu}
+  Masanao Yajima \email{yajima@bu.edu},
+  Gianluca Baio \email{g.baio@ucl.ac.uk}
 }
 
 

@@ -181,14 +181,21 @@ as.bugs.array2 <- function(sims.array, model.file=NULL, program="jags",
   if(DIC && is.null(DICOutput)) { ## calculate DIC from deviance
     deviance <- all$sims.array[, , "deviance", drop = FALSE]
     dim(deviance) <- dim(deviance)[1:2]
-    pD <- numeric(n.chains)
+# Modified by GB to rename pD to pV
+    pV <- numeric(n.chains)
     DIC <- numeric(n.chains)
     for (i in 1:n.chains) {
-      pD[i] <- var(deviance[, i])/2
-      DIC[i] <- mean(deviance[, i]) + pD[i]
+      pV[i] <- var(deviance[, i])/2
+      DIC[i] <- mean(deviance[, i]) + pV[i]
     }
-    all <- c(all, list(isDIC=TRUE, DICbyR=TRUE,  pD=mean(pD), DIC=mean(DIC)))
+    all <- c(all, list(isDIC=TRUE, DICbyR=TRUE,  pV=mean(pV), DIC=mean(DIC)))
   }
+  #' GB: This is ported by R2WinBUGS/R2OpenBUGS and assumes that the model
+  #' is actually run using BUGS, which would mean you can actually compute
+  #' pD using BUGS output. In this case, because 'DICOutput' is set to 'NULL'
+  #' this bit is kind of ignored. But the drawback is that the only possibility
+  #' to compute pD is to go through 'rjags::dic.samples()'. I have added an
+  #' optional call to 'rjags::dic.samples' in 'jags' to compute pD
   else if(DIC && !is.null(DICOutput)) { ## use DIC from BUGS
     all <- c(all, list(isDIC=TRUE, DICbyR=FALSE,
                        pD=DICOutput[nrow(DICOutput),4],
