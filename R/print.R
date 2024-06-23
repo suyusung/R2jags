@@ -24,13 +24,14 @@ print.rjags <- function(x, digits = 3,
   if (!is.null(x$model.file)) 
       cat("Inference for Bugs model at \"", x$model.file, "\", ", 
           sep = "")
-  if (!is.null(x$program)) 
-      cat("fit using ", x$program, ",", sep = "")
+#' GB: silence this to make the table fit within the width of the quarto book
+#  if (!is.null(x$program)) 
+#      cat("fit using ", x$program, ",", sep = "")
   cat("\n ", x$n.chains, " chains, each with ", x$n.iter, " iterations (first ", 
       x$n.burnin, " discarded)", sep = "")
   if (x$n.thin > 1) 
       cat(", n.thin =", x$n.thin)
-  cat("\n n.sims =", x$n.sims, "iterations saved. Running time =",x$time2run,"secs\n")
+  cat("\n n.sims =", x$n.sims, "iterations saved\n")
   print(round(summaryMatrix, digits), ...)
   if (x$n.chains > 1) {
       cat("\nFor each parameter, n.eff is a crude measure of effective sample size,")
@@ -96,3 +97,4 @@ print.rjags <- function(x, digits = 3,
 #    invisible(x)
 #}
 #
+>>>>>>> e248cee (Silences the 'fit with jags' message in the print table to make it fit with the width of the quarto book)

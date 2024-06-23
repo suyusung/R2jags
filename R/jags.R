@@ -18,11 +18,11 @@ jags <- function( data, inits,
                   working.directory = NULL,
                   jags.seed    = 123,
                   refresh      = n.iter/50,
-                  progress.bar = "text",
+                  progress.bar = "none",
                   digits = 5,
                   RNGname = c("Wichmann-Hill", "Marsaglia-Multicarry", "Super-Duper", "Mersenne-Twister"),
                   jags.module = c("glm","dic"),
-                  quiet = FALSE,
+                  quiet = TRUE,
                   checkMissing = FALSE
                   )
 {
