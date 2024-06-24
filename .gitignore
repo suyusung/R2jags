@@ -36,3 +36,4 @@ vignettes/*.pdf
 *.db-journal
 .svn/wc.db
 .svn/format
+.github
