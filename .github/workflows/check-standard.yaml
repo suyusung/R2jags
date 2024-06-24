@@ -1,0 +1,75 @@
+# Workflow derived from https://github.com/r-lib/actions/tree/master/examples
+# Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
+on:
+  push:
+    branches: [main, bmhta]
+  pull_request:
+    branches: [main, bmhta]
+
+name: R-CMD-check
+
+jobs:
+  R-CMD-check:
+    runs-on: ${{ matrix.config.os }}
+
+    name: ${{ matrix.config.os }} (${{ matrix.config.r }})
+
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - {os: macOS-latest,   r: 'release'}
+          - {os: windows-latest, r: 'release'}
+          - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release'}
+          - {os: ubuntu-latest,   r: 'release'}
+          - {os: ubuntu-latest,   r: 'oldrel-1'}
+
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      R_KEEP_PKG_SOURCE: yes
+      RSPM: ${{ matrix.config.rspm }}
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: ${{ matrix.config.r }}
+          http-user-agent: ${{ matrix.config.http-user-agent }}
+          use-public-rspm: true
+
+      - uses: r-lib/actions/setup-pandoc@v2
+      
+      - name: Double check repos
+        run: |
+          print(getOption("repos"))
+        shell: Rscript {0}
+
+#      - name: Install JAGS
+#        run: |
+#          sudo apt-get update -y
+#          sudo apt-get install -y jags
+
+        # Downloads the latest version of JAGS exe file
+      - name: Install jags (windows-latest)
+        if: runner.os == 'Windows'
+        run: |
+          curl.exe -o wjags.exe --url https://sourceforge.net/projects/mcmc-jags/files/latest/download
+          wjags.exe /S
+          del wjags.exe
+        shell: cmd
+
+        # Install JAGS on Mac OS
+      - name: Install jags (macOS-latest)
+        if: runner.os == 'macOS'
+        run : brew install jags
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          dependencies: '"all"'
+          extra-packages: |
+             rcmdcheck
+          
+      - uses: r-lib/actions/check-r-package@v2
+        with:
+          upload-snapshots: true
