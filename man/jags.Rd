@@ -231,18 +231,18 @@ jags2(data, inits, parameters.to.save, model.file="model.bug",
   jagsfit <- jags(data=jags.data, inits=jags.inits, jags.params,
     n.iter=5000, model.file=model.file)
 
+  # Can also compute the DIC using pD (=Dbar-Dhat), via dic.samples(), which
+  # is a closer approximation to the original formulation of Spiegelhalter et
+  # al (2002), instead of pV (=var(deviance)/2), which is the default in JAGS
+   jagsfit.pD <- jags.parallel(data=jags.data, inits=jags.inits, jags.params,
+     n.iter=5000, model.file=model.file, pD=TRUE)
+
   # Run jags parallely, no progress bar. R may be frozen for a while,
   # Be patient. Currenlty update afterward does not run parallelly
   #
    jagsfit.p <- jags.parallel(data=jags.data, inits=jags.inits, jags.params,
      n.iter=5000, model.file=model.file)
   
-  # Can also compute the DIC using pD (=Dbar-Dhat), via dic.samples(), which
-  # is a closer approximation to the original formulation of Spiegelhalter et
-  # al (2002), instead of pV (=var(deviance)/2), which is the default in JAGS
-   jagsfit.p <- jags.parallel(data=jags.data, inits=jags.inits, jags.params,
-     n.iter=5000, model.file=model.file, pD=TRUE)
-
   # display the output
   print(jagsfit)
   plot(jagsfit)
