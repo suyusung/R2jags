@@ -55,7 +55,7 @@ jobs:
       - name: Install jags (windows-latest)
         if: runner.os == 'Windows'
         run: |
-          curl.exe -o wjags.exe --url https://sourceforge.net/projects/mcmc-jags/files/JAGS/4.x/Windows/JAGS-4.2.0-Rtools33.exe/download
+          curl.exe -o wjags.exe --url https://sourceforge.net/projects/mcmc-jags/files/JAGS/4.x/Windows/JAGS-4.2.0-Rtools33.exe
           wjags.exe /S
           del wjags.exe
         shell: cmd
@@ -63,7 +63,9 @@ jobs:
         # Install JAGS on Mac OS
       - name: Install jags (macOS-latest)
         if: runner.os == 'macOS'
-        run : brew install jags
+        run : |
+          rm '/usr/local/bin/gfortran'
+          brew install jags
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
