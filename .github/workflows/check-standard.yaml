@@ -58,6 +58,7 @@ jobs:
           curl.exe -o wjags.exe --url https://deac-fra.dl.sourceforge.net/project/mcmc-jags/JAGS/4.x/Windows/JAGS-4.2.0-Rtools33.exe
           wjags.exe /S
           del wjags.exe
+          jags
         shell: cmd
 
         # Install JAGS on Mac OS
