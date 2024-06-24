@@ -24,9 +24,15 @@ print.rjags <- function(x, digits = 3,
   if (!is.null(x$model.file)) 
       cat("Inference for Bugs model at \"", x$model.file, "\", ", 
           sep = "")
-#' GB: silence this to make the table fit within the width of the quarto book
-#  if (!is.null(x$program)) 
-#      cat("fit using ", x$program, ",", sep = "")
+  
+  if(!is.null(x$program)) {
+    if(!exists("print.program",list(...))) {
+      print.program <- getOption("r2j.print.program")
+    } 
+    if(print.program) {
+        cat("fit using ", x$program, ",", sep = "")
+    }
+  }
   cat("\n ", x$n.chains, " chains, each with ", x$n.iter, " iterations (first ", 
       x$n.burnin, " discarded)", sep = "")
   if (x$n.thin > 1) 

@@ -107,7 +107,7 @@ jags2(data, inits, parameters.to.save, model.file="model.bug",
       \dQuote{gui}, and \dQuote{none}. Type \dQuote{text} is displayed
       on the R console. Type \dQuote{gui} is a graphical progress bar
       in a new window. The progress bar is suppressed if \code{progress.bar} is
-      \dQuote{none}}
+      \dQuote{none}. Default set globally to \dQuote{text}}
     \item{digits}{as in \code{\link{write.model}} in the \pkg{R2WinBUGS} package:  number of significant digits used for
   \code{BUGS} input, see \code{\link{formatC}}.  Only used if specifying  a \code{BUGS} model as an R function.}
   \item{RNGname}{the name for random number generator used in JAGS. There are four RNGS
@@ -116,7 +116,7 @@ jags2(data, inits, parameters.to.save, model.file="model.bug",
   \item{jags.module}{the vector of jags modules to be loaded.  Default are \dQuote{glm} and \dQuote{dic}. Input NULL if you don't want to load any jags module.}
   \item{export_obj_names}{character vector of objects to export to the clusters.}
   \item{envir}{default is .GlobalEnv}
-  \item{quiet}{Logical, whether to suppress stdout in \code{jags.model()}.}
+  \item{quiet}{Logical, whether to suppress stdout in \code{jags.model()}. Default set globally to \dQuote{FALSE}}
   \item{checkMissing}{Default: FALSE. When TRUE, checks for missing data in categorical parameters 
   and returns a \code{sim.list} with NA values if detected. It's recommended to supply \code{jags()} with complete data.}
 }
@@ -230,6 +230,12 @@ jags2(data, inits, parameters.to.save, model.file="model.bug",
 #===============================#
   jagsfit <- jags(data=jags.data, inits=jags.inits, jags.params,
     n.iter=5000, model.file=model.file)
+    
+  # Can also compute the DIC using pD (=Dbar-Dhat), via dic.samples(), which
+  # is a closer approximation to the original formulation of Spiegelhalter et
+  # al (2002), instead of pV (=var(deviance)/2), which is the default in JAGS
+   jagsfit.pD <- jags.parallel(data=jags.data, inits=jags.inits, jags.params,
+     n.iter=5000, model.file=model.file, pD=TRUE)
 
   # Run jags parallely, no progress bar. R may be frozen for a while,
   # Be patient. Currenlty update afterward does not run parallelly
