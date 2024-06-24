@@ -50,11 +50,12 @@ jobs:
 #          sudo apt-get update -y
 #          sudo apt-get install -y jags
 
-        # Downloads the latest version of JAGS exe file
+        # Downloads the version of JAGS exe file linked to Rtools, which is necessary to run the check
+        # See: https://forum.posit.co/t/check-standard-yaml-fails-to-install-system-dependencies-on-macos-and-windows/89393/3
       - name: Install jags (windows-latest)
         if: runner.os == 'Windows'
         run: |
-          curl.exe -o wjags.exe --url https://sourceforge.net/projects/mcmc-jags/files/latest/download
+          curl.exe -o wjags.exe --url https://sourceforge.net/projects/mcmc-jags/files/JAGS/4.x/Windows/JAGS-4.2.0-Rtools33.exe/download
           wjags.exe /S
           del wjags.exe
         shell: cmd
