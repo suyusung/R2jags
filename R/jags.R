@@ -164,7 +164,7 @@ jags <- function( data, inits,
   # Updates the model for the burning phase
   .update.jags(   
     m,
-    n.iter=n.burnin,
+    n.iter=max(n.burnin,(n.iter/2)),
     n.thin=n.thin,
     by=refresh,
     progress.bar=progress.bar
