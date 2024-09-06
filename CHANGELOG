@@ -1,3 +1,8 @@
+2024-09-05 Yu-Sung Su     <suyusung@tsinghua.edu.cn>
+   * DESCRIPTION (Version, Date): 0.8-7
+   * man/jags.Rd: fix the broken link of write.model
+
+
 2024-06-22 Gianluca Baio <g.baio@ucl.ac.uk>
    * DESCRIPTION (Date): 2024-06-22
    * DESCRIPTION (Authors): Add GB's contributions

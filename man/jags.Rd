@@ -64,7 +64,7 @@ jags2(data, inits, parameters.to.save, model.file="model.bug",
   \item{model.file}{file containing the model written in \code{BUGS}
   code. Alternatively, as in \pkg{R2WinBUGS}, \code{model.file} can be an R
   function that contains a \code{BUGS} model that is written to a
-  temporary model file (see \code{\link{tempfile}}) using \code{\link{write.model}}}
+  temporary model file (see \code{tempfile}) using \code{write.model}}
   \item{n.chains}{number of Markov chains (default: 3)}
   \item{n.iter}{number of total iterations per chain (including burn in;
     default: 2000)}
@@ -108,7 +108,7 @@ jags2(data, inits, parameters.to.save, model.file="model.bug",
       on the R console. Type \dQuote{gui} is a graphical progress bar
       in a new window. The progress bar is suppressed if \code{progress.bar} is
       \dQuote{none}}
-    \item{digits}{as in \code{\link{write.model}} in the \pkg{R2WinBUGS} package:  number of significant digits used for
+    \item{digits}{as in \code{write.model} in the \pkg{R2WinBUGS} package:  number of significant digits used for
   \code{BUGS} input, see \code{\link{formatC}}.  Only used if specifying  a \code{BUGS} model as an R function.}
   \item{RNGname}{the name for random number generator used in JAGS. There are four RNGS
   supplied by the base moduale in JAGS: \code{Wichmann-Hill}, \code{Marsaglia-Multicarry},
