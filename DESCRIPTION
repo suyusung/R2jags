@@ -1,6 +1,6 @@
 Package: R2jags
-Version: 0.8-7
-Date: 2024-09-05
+Version: 0.8-9
+Date: 2024-10-12
 Title: Using R to Run 'JAGS'
 Authors@R: c(person("Yu-Sung", "Su", role =  c("aut", "cre"), 
 		      email = "suyusung@tsinghua.edu.cn", 
