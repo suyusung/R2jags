@@ -2,6 +2,7 @@
 # better way to get the internal function update.jags from rjags package.
 # ::: simply doesn't work.
 .update.jags <- get("update.jags", envir = asNamespace("rjags"))
+.quiet.messages <- get(".quiet.messages", envir = asNamespace("rjags"))
 
 # New version edited by GB to fix bugs and make nicer output
 jags <- function( data, inits,
@@ -18,11 +19,11 @@ jags <- function( data, inits,
                   working.directory = NULL,
                   jags.seed    = 123,
                   refresh      = n.iter/50,
-                  progress.bar = "text",
+                  progress.bar,
                   digits = 5,
                   RNGname = c("Wichmann-Hill", "Marsaglia-Multicarry", "Super-Duper", "Mersenne-Twister"),
                   jags.module = c("glm","dic"),
-                  quiet = FALSE,
+                  quiet,
                   checkMissing = FALSE
                   )
 {
@@ -39,6 +40,26 @@ jags <- function( data, inits,
     savedWD <- getwd()
     working.directory <- savedWD
   }
+  
+  ## Checks for global options (re progress.bar and quiet)
+  if (missing(progress.bar)) {
+    progress.bar <- getOption("r2j.pb")
+  }
+  if (!is.null(progress.bar)) {
+    match.arg(progress.bar, c("text","gui","none"))
+    if (progress.bar=="none")
+      progress.bar <- NULL
+  }
+  if (missing(quiet)) {
+    quiet <- getOption("r2j.quiet")
+  }
+  if (!is.null(quiet)) {
+    if(quiet) {
+      .quiet.messages(TRUE)
+      on.exit(.quiet.messages(FALSE), add=TRUE)
+    }
+  }
+  
   ## jags.model() needs 'data' to be "a list or environment containing the data
   if( is.character( data ) && length(data) == 1
                            && regexpr( "\\.txt$", data ) > 0 ) {
@@ -162,12 +183,13 @@ jags <- function( data, inits,
   adapt(m,n.iter=n.adapt,progress.bar="none",quiet=TRUE,end.adaptation=TRUE)
 
   # Updates the model for the burning phase
-  .update.jags(   
+  .update.jags( 
     m,
-    n.iter=max(n.burnin,(n.iter/2)),
+    n.iter=max(n.burnin,round(n.iter/2)),
     n.thin=n.thin,
     by=refresh,
-    progress.bar=progress.bar
+    progress.bar=progress.bar,
+    quiet = quiet
   )
 
   # Now saves the samples after burnin
@@ -176,6 +198,7 @@ jags <- function( data, inits,
                            n.iter         = ( n.iter - n.burnin ),
                            thin           = n.thin,
                            by             = refresh,
+                           quiet          = quiet,
                            progress.bar   = progress.bar )
 
   #' GB: Add call to 'rjags::dic.samples()' to add pD if the argument 'pD' is

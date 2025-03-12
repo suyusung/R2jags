@@ -1,6 +1,16 @@
 autojags <- function(object, n.iter=1000, n.thin=1, Rhat=1.1, n.update=2, refresh=n.iter/50, 
-    progress.bar = "text",...)
+    progress.bar,...)
 {
+  ## Checks for global options (re progress.bar and quiet)
+  if (missing(progress.bar)) {
+    progress.bar <- getOption("r2j.pb")
+  }
+  if (!is.null(progress.bar)) {
+    match.arg(progress.bar, c("text","gui","none"))
+    if (progress.bar=="none")
+      progress.bar <- NULL
+  }
+
   n.burnin = object$n.iter
   n.thin.auto <- max( 1, floor( ( n.iter - n.burnin )/1000 ) )
   n.thin <- ifelse(n.thin > n.thin.auto, n.thin, n.thin.auto)
