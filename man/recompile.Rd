@@ -13,7 +13,7 @@ The \code{recompile} takes a \code{rjags} object as input.
 
 recompile(object, n.iter, refresh, progress.bar)
 \method{recompile}{rjags}(object, n.iter=100, refresh=n.iter/50, 
-    progress.bar = "text")
+    progress.bar)
 
 
 }

@@ -22,10 +22,10 @@ jags(data, inits, parameters.to.save, model.file="model.bug",
   n.thin=max(1, floor((n.iter - n.burnin) / 1000)),
   DIC=TRUE, pD = FALSE, n.iter.pd = NULL, n.adapt = 100,
   working.directory=NULL, jags.seed = 123,
-  refresh = n.iter/50, progress.bar = "text", digits=5,
+  refresh = n.iter/50, progress.bar, digits=5,
   RNGname = c("Wichmann-Hill", "Marsaglia-Multicarry",
               "Super-Duper", "Mersenne-Twister"),
-  jags.module = c("glm","dic"), quiet = FALSE,
+  jags.module = c("glm","dic"), quiet,
   checkMissing = FALSE
   )
 
@@ -234,7 +234,7 @@ jags2(data, inits, parameters.to.save, model.file="model.bug",
   # Can also compute the DIC using pD (=Dbar-Dhat), via dic.samples(), which
   # is a closer approximation to the original formulation of Spiegelhalter et
   # al (2002), instead of pV (=var(deviance)/2), which is the default in JAGS
-   jagsfit.pD <- jags.parallel(data=jags.data, inits=jags.inits, jags.params,
+   jagsfit.pD <- jags(data=jags.data, inits=jags.inits, jags.params,
      n.iter=5000, model.file=model.file, pD=TRUE)
 
   # Run jags parallely, no progress bar. R may be frozen for a while,
