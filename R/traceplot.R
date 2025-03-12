@@ -1,7 +1,5 @@
 #traceplot <- function(x, ...) UseMethod("traceplot")
 
-
-
 if (!isGeneric("traceplot")) {
     setGeneric("traceplot",
                function(x, ...)
@@ -16,7 +14,6 @@ if (!isGeneric("traceplot")) {
 # ========================================================================
 # function for trace plot
 # ========================================================================
-
 
 setMethod("traceplot", signature(x = "mcmc.list"),
   function (x, smooth = TRUE, col = 1:6, type = "l", ylab = "", ...)
@@ -40,7 +37,6 @@ setMethod("traceplot", signature(x = "mcmc.list"),
   }
 }
 )
-
 
 
 setMethod("traceplot", signature(x = "rjags"),

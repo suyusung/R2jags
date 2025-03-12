@@ -12,14 +12,16 @@ count_nodes(x, ...)
 \item{...}{Additional parameters that can be passed}
 }
 \value{
-A vector with the number of observed, unobserved and 
-total nodes included in the DAG resulting from the model 
-assumptions encoded by the code
+A vector with the number of observed, unobserved and total nodes
+included in the DAG resulting from the model assumptions encoded by the
+code
 }
 \description{
 Retrives the information from the JAGS compilation
 }
 \examples{
+
+
 # An example model file is given in:
 model.file <- system.file(package="R2jags", "model", "schools.txt")
 #=================# 
@@ -37,6 +39,8 @@ jags.inits <- function(){
 jagsfit <- jags(data=list("y","sd","J"), inits=jags.inits, jags.params,
              n.iter=10, model.file=model.file)
 count_nodes(jagsfit)
+
+
 
 }
 \author{

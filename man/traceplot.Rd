@@ -6,8 +6,6 @@
 \alias{traceplot,rjags-method}
 \alias{traceplot,bugs-method}
 
-
-
 \title{Trace plot of bugs object}
 
 \usage{

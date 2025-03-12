@@ -1,3 +1,5 @@
+##' @rdname jags
+##' @export
 jags2 <- function (data, inits, parameters.to.save, model.file = "model.bug",
   n.chains = 3, n.iter = 2000, n.burnin = floor(n.iter/2),
   n.thin = max(1, floor((n.iter - n.burnin)/1000)),

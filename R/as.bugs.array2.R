@@ -190,12 +190,12 @@ as.bugs.array2 <- function(sims.array, model.file=NULL, program="jags",
     }
     all <- c(all, list(isDIC=TRUE, DICbyR=TRUE,  pV=mean(pV), DIC=mean(DIC)))
   }
-  #' GB: This is ported by R2WinBUGS/R2OpenBUGS and assumes that the model
-  #' is actually run using BUGS, which would mean you can actually compute
-  #' pD using BUGS output. In this case, because 'DICOutput' is set to 'NULL'
-  #' this bit is kind of ignored. But the drawback is that the only possibility
-  #' to compute pD is to go through 'rjags::dic.samples()'. I have added an
-  #' optional call to 'rjags::dic.samples' in 'jags' to compute pD
+  # GB: This is ported by R2WinBUGS/R2OpenBUGS and assumes that the model
+  # is actually run using BUGS, which would mean you can actually compute
+  # pD using BUGS output. In this case, because 'DICOutput' is set to 'NULL'
+  # this bit is kind of ignored. But the drawback is that the only possibility
+  # to compute pD is to go through 'rjags::dic.samples()'. I have added an
+  # optional call to 'rjags::dic.samples' in 'jags' to compute pD
   else if(DIC && !is.null(DICOutput)) { ## use DIC from BUGS
     all <- c(all, list(isDIC=TRUE, DICbyR=FALSE,
                        pD=DICOutput[nrow(DICOutput),4],
