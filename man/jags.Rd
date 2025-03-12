@@ -183,6 +183,17 @@ console.  }
 % BUGS version support: % \itemize{ % \item \pkg{jags} 1.0.3 {default} % }
 }
 \examples{
+# Can set global options for some of the features of R2jags. For example
+# running the command
+options(r2j.pb="none")
+# before launching jags shuts down the progress bar. Or running the command
+options(r2j.quiet=FALSE)
+# forces jags to not show the compilation summary. Or running the command
+options(r2j.print.progam=FALSE)
+# modifies the print method and prevents R2jags from printing the name of 
+# software used to run the MCMC analysis. These options may be helpful 
+# when using Rmarkdown or quarto to help formtting the output.
+#
 # An example model file is given in:
 model.file <- system.file(package="R2jags", "model", "schools.txt")
 # Let's take a look:
