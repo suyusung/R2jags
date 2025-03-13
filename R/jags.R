@@ -201,7 +201,7 @@
 ##' jagsfit.p <- jags.parallel(data = jags.data, inits = jags.inits, 
 ##'                             parameters.to.save = jags.params, 
 ##'                             n.iter = 5000, model.file = model.file)
-##' print(jagsfit.p)
+##' print(jagsfit.p,digits=3,interval=c(0.025,0.975))
 ##' plot(jagsfit.p)
 ##' }
 ##' 
