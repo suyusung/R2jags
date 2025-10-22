@@ -38,30 +38,34 @@ jobs:
 
       - uses: r-lib/actions/setup-pandoc@v2
 
-      # Ubuntu: install from apt
+      # Ubuntu: apt install JAGS
       - name: Install JAGS (ubuntu)
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update -y
           sudo apt-get install -y jags
 
-      # macOS: brew install, then symlink libraries for rjags
+      # macOS: fix library + module path
       - name: Install JAGS (macOS)
         if: runner.os == 'macOS'
         run: |
           brew install jags pkg-config
-          JAGS_LIB=$(brew --prefix jags)/lib
+          JAGS_PREFIX=$(brew --prefix jags)
           sudo mkdir -p /usr/local/lib
-          sudo ln -sf ${JAGS_LIB}/libjags.* /usr/local/lib/ || true
-          ls -l /usr/local/lib/libjags.*
+          sudo ln -sf ${JAGS_PREFIX}/lib/libjags.* /usr/local/lib/ || true
+          sudo ln -sfn ${JAGS_PREFIX}/lib/JAGS /usr/local/lib/JAGS || true
+          ls -R /usr/local/lib/JAGS
 
-      # Windows: install via Chocolatey (no GUI)
+      # Windows: silent install JAGS 4.3.1 manually
       - name: Install JAGS (Windows)
         if: runner.os == 'Windows'
-        run: |
-          choco install jags --version=4.3.1 -y
-          dir "C:\Program Files\JAGS"
         shell: pwsh
+        run: |
+          $url = "https://sourceforge.net/projects/mcmc-jags/files/JAGS/4.x/Windows/JAGS-4.3.1-Rtools43.exe/download"
+          Invoke-WebRequest -Uri $url -OutFile JAGS-installer.exe -UseBasicParsing
+          Start-Process -FilePath .\JAGS-installer.exe -ArgumentList "/S" -NoNewWindow -Wait
+          Remove-Item .\JAGS-installer.exe -Force
+          Get-ChildItem "C:\Program Files" | Where-Object { $_.Name -match "JAGS" }
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
