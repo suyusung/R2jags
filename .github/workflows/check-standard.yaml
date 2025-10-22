@@ -38,28 +38,30 @@ jobs:
 
       - uses: r-lib/actions/setup-pandoc@v2
 
-      # Install JAGS on Linux
-      - name: Install JAGS (ubuntu-latest)
+      # Ubuntu: install from apt
+      - name: Install JAGS (ubuntu)
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update -y
           sudo apt-get install -y jags
 
-      # Install JAGS on macOS (fix lib path issue)
-      - name: Install JAGS (macOS-latest)
+      # macOS: brew install, then symlink libraries for rjags
+      - name: Install JAGS (macOS)
         if: runner.os == 'macOS'
         run: |
           brew install jags pkg-config
-          sudo ln -s /opt/homebrew/lib/libjags.* /usr/local/lib/ || true
+          JAGS_LIB=$(brew --prefix jags)/lib
+          sudo mkdir -p /usr/local/lib
+          sudo ln -sf ${JAGS_LIB}/libjags.* /usr/local/lib/ || true
+          ls -l /usr/local/lib/libjags.*
 
-      # Install JAGS on Windows
-      - name: Install JAGS (windows-latest)
+      # Windows: install via Chocolatey (no GUI)
+      - name: Install JAGS (Windows)
         if: runner.os == 'Windows'
         run: |
-          curl -L -o JAGS.exe https://sourceforge.net/projects/mcmc-jags/files/JAGS/4.x/Windows/JAGS-4.3.1-Rtools43.exe/download
-          JAGS.exe /S
-          echo "JAGS installed"
-        shell: cmd
+          choco install jags --version=4.3.1 -y
+          dir "C:\Program Files\JAGS"
+        shell: pwsh
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
