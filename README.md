@@ -3,15 +3,15 @@ R2jags: Using R to Run JAGS to perform Bayesian inference using MCMC
 
 <!--
 [![Build Status](https://app.travis-ci.com/n8thangreen/BCEA.svg?branch=dev)](https://app.travis-ci.com/n8thangreen/BCEA)
-[![R-CMD-check](https://github.com/n8thangreen/BCEA/actions/workflows/check-standard.yaml/badge.svg?branch=dev)](https://github.com/n8thangreen/BCEA/actions/workflows/check-standard.yaml)
-[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/BCEA)](https://cran.r-project.org/package=BCEA)
-[![CRAN_Download_Badge](https://cranlogs.r-pkg.org/badges/BCEA)](https://cran.r-project.org/package=BCEA)
-[![CRAN_Download_Badge](https://cranlogs.r-pkg.org/badges/grand-total/BCEA?color=orange)](https://cran.r-project.org/package=BCEA)
-[![CodeFactor](https://www.codefactor.io/repository/github/n8thangreen/bcea/badge)](https://www.codefactor.io/repository/github/n8thangreen/bcea)
 [![DOI](https://joss.theoj.org/papers/10.21105/joss.04206/status.svg)](https://doi.org/10.21105/joss.04206)
 -->
 
-> Perform Bayesian Cost-Effectiveness Analysis in R.
+[![R-CMD-check](https://github.com/giabaio/R2jags/actions/workflows/check-standard.yaml/badge.svg?branch=main)](https://github.com/giabaio/R2jags/actions/workflows/check-standard.yaml)
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/R2jags)](https://cran.r-project.org/package=R2jags)
+[![CRAN_Download_Badge](https://cranlogs.r-pkg.org/badges/R2jags)](https://cran.r-project.org/package=R2jags)
+[![CRAN_Download_Badge](https://cranlogs.r-pkg.org/badges/grand-total/R2jags?color=orange)](https://cran.r-project.org/package=R2jags)
+
+> Perform Bayesian modelling in R using JAGS.
 
 :rocket: This is the **development version** of the `R` package `R2jags`
 (currently on version 0.8-10). The stable version is now release 0.8-9,
