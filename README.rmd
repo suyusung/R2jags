@@ -27,7 +27,6 @@ output: github_document
 - [Overview](#introduction)
 - [Features](#features)
 - [Installation](#installation)
-- [Further details](#further-details)
 
 ## Overview
 

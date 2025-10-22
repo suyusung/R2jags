@@ -22,7 +22,6 @@ on [CRAN](https://cran.r-project.org/web/packages/R2jags/index.html).
 - [Overview](#introduction)
 - [Features](#features)
 - [Installation](#installation)
-- [Further details](#further-details)
 
 ## Overview
 
