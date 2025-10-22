@@ -2,9 +2,9 @@
 # Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
 on:
   push:
-    branches: [main, bmhta]
+    branches: [main]
   pull_request:
-    branches: [main, bmhta]
+    branches: [main]
 
 name: R-CMD-check
 
@@ -55,7 +55,7 @@ jobs:
       - name: Install jags (windows-latest)
         if: runner.os == 'Windows'
         run: |
-          curl.exe -o wjags.exe --url https://deac-fra.dl.sourceforge.net/project/mcmc-jags/JAGS/4.x/Windows/JAGS-4.2.0-Rtools33.exe
+          curl.exe -o wjags.exe --url https://sourceforge.net/projects/mcmc-jags/files/JAGS/4.x/Windows/JAGS-4.2.0-Rtools33.exe
           wjags.exe /S
           del wjags.exe
           jags
