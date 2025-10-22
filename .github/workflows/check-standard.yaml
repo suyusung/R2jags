@@ -61,10 +61,10 @@ jobs:
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
-          $url = "https://sourceforge.net/projects/mcmc-jags/files/JAGS/4.x/Windows/JAGS-4.3.1-Rtools43.exe/download"
-          Invoke-WebRequest -Uri $url -OutFile JAGS-installer.exe -UseBasicParsing
-          Start-Process -FilePath .\JAGS-installer.exe -ArgumentList "/S" -NoNewWindow -Wait
-          Remove-Item .\JAGS-installer.exe -Force
+          $url = "https://downloads.sourceforge.net/project/mcmc-jags/JAGS/4.x/Windows/JAGS-4.3.1.exe"
+          curl.exe -L -o JAGS.exe $url
+          Start-Process -FilePath .\JAGS.exe -ArgumentList "/S" -NoNewWindow -Wait
+          Remove-Item .\JAGS.exe -Force
           Get-ChildItem "C:\Program Files" | Where-Object { $_.Name -match "JAGS" }
 
       - uses: r-lib/actions/setup-r-dependencies@v2
