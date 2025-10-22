@@ -3,7 +3,8 @@
 ##' Retrives the information from the JAGS compilation
 ##' 
 ##' 
-##' @param x A rjags object derived from running \code{jags}.
+##' @param x A 'rjags' object (obtained from running \code{R2jags::jags}) or a 
+##' 'jags' object (resulting from running \code{rjags::jags.samples}.
 ##' @param ... Additional parameters that can be passed
 ##' @return A vector with the number of observed, unobserved and total nodes
 ##' included in the DAG resulting from the model assumptions encoded by the
@@ -33,6 +34,15 @@
 ##' 
 ##' 
 count_nodes=function(x,...) {
+  # First checks what type of object we have here. Could be a 'jags' (as from
+  # the 'rjags' package), or, most likely, a 'rjags' object (from 'R2jags')
+  if(class(x)=="jags") {
+    x=list(model=x)
+  } else if (class(x)=="rjags") {
+    x=x
+  } else {
+    stop("The input x must be either a 'jags' (processed by the package 'rjags') or an 'rjags' (processed by the package 'R2jags') object.")
+  }
   temp_file=tempfile(fileext=".jag")
   sink(temp_file)
   x$model$recompile()

@@ -18,5 +18,5 @@
 #' @return NULL
 #' @noRd
 .onAttach <- function(libname, pkgname) {
-  packageStartupMessage("The R2jags version loaded is: ", utils::packageVersion("R2jags"))
+  packageStartupMessage("\nThe R2jags version loaded is: ", utils::packageVersion("R2jags"))
 }

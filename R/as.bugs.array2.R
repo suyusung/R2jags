@@ -76,6 +76,8 @@ as.bugs.array2 <- function(sims.array, model.file=NULL, program="jags",
   }
   # ----
   dimnames(sims) <- list(NULL, parameter.names)
+  # GB: This is when the Rhat and n.eff are computed! The R2WinBUGS::monitor function does this,
+  #     via the hidden function R2WinBUGS:::conv.par
   summary <- monitor(sims.array, n.chains, keep.all = TRUE)
   last.values <- as.list(numeric(n.chains))
 

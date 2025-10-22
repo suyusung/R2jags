@@ -7,7 +7,8 @@
 count_nodes(x, ...)
 }
 \arguments{
-\item{x}{A rjags object derived from running \code{jags}.}
+\item{x}{A 'rjags' object (obtained from running \code{R2jags::jags}) or a 
+'jags' object (resulting from running \code{rjags::jags.samples}.}
 
 \item{...}{Additional parameters that can be passed}
 }
