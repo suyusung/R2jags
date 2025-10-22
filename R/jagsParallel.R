@@ -1,3 +1,6 @@
+##' @rdname jags
+##' @export
+
 jags.parallel <- function (data, inits, parameters.to.save, model.file = "model.bug",
     n.chains = 2, n.iter = 2000, n.burnin = floor(n.iter/2),
     n.thin = max(1, floor((n.iter - n.burnin)/1000)), n.cluster = n.chains,

@@ -42,7 +42,8 @@ export(
        "jags.parallel",
        "jags2",
        "jags2bugs",
-       "recompile"
+       "recompile",
+       "count_nodes"
 )
 
 S3method("recompile", "rjags")
