@@ -1,2 +1,100 @@
-# R2jags
-R2jags: Using R to Run 'JAGS'
+R2jags: Using R to Run JAGS to perform Bayesian inference using MCMC
+================
+
+<!--
+[![Build Status](https://app.travis-ci.com/n8thangreen/BCEA.svg?branch=dev)](https://app.travis-ci.com/n8thangreen/BCEA)
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.04206/status.svg)](https://doi.org/10.21105/joss.04206)
+-->
+
+[![R-CMD-check](https://github.com/giabaio/R2jags/actions/workflows/check-standard.yaml/badge.svg?branch=main)](https://github.com/giabaio/R2jags/actions/workflows/check-standard.yaml)
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/R2jags)](https://cran.r-project.org/package=R2jags)
+[![CRAN_Download_Badge](https://cranlogs.r-pkg.org/badges/R2jags)](https://cran.r-project.org/package=R2jags)
+[![CRAN_Download_Badge](https://cranlogs.r-pkg.org/badges/grand-total/R2jags?color=orange)](https://cran.r-project.org/package=R2jags)
+
+> Perform Bayesian modelling in R using JAGS.
+
+:rocket: This is the **development version** of the `R` package `R2jags`
+(currently on version 0.8-10). The stable version is now release 0.8-9,
+on [CRAN](https://cran.r-project.org/web/packages/R2jags/index.html).
+
+## Contents
+
+- [Overview](#introduction)
+- [Features](#features)
+- [Installation](#installation)
+
+## Overview
+
+`R2jags` provides a set of wrapper functions to implement Bayesian
+analysis using Markov Chain Monte Carlo (specifically, Gibbs sampling)
+in [`JAGS`](https://mcmc-jags.sourceforge.io/). Some major features
+include monitoring convergence of a MCMC model using Gelman-Rubin
+Potential Scale Reduction (“Rhat”) statistics, automatically running a
+MCMC model until it converges, and implementing parallel processing of a
+MCMC model for multiple chains.
+
+## Features
+
+Main features of `R2jags` include:
+
+- Wrapping functions from `rjags` and `R2WinBUGS` to run `JAGS` in the
+  background and produce a MCMC analysis of a given model.
+- Summary statistics and tables
+- Convergence and auto-correlation calculations and plots
+
+## Installation
+
+Install the [released version from
+CRAN](https://cran.r-project.org/package=R2jags) with
+
+``` r
+install.packages("R2jags")
+```
+
+The development version (in this repo, which can be updated more quickly
+and more often than the stable one) can be installed from
+`r-universe.dev`, using the following command
+
+``` r
+install.packages(
+  'R2jags', 
+  repos = c('https://giabaio.r-universe.dev', 'https://cloud.r-project.org')
+)
+```
+
+Alternatively, you can install the development version using `remotes`,
+with the following command.
+
+``` r
+install.packages("remotes")
+remotes::install_github("giabaio/R2jags",ref="devel")
+```
+
+**NB**: On Windows machines, you need to install a few dependencies,
+including [Rtools](https://cran.r-project.org/bin/windows/Rtools/)
+first, e.g. by running
+
+``` r
+pkgs <- c("MASS", "Rtools", "remotes")
+repos <- "https://cran.rstudio.com"
+install.packages(pkgs, repos = repos, dependencies = "Depends")
+```
+
+before installing the package using `remotes`.
+
+## License
+
+[![License: GPL
+v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+
+## Contributing
+
+Please submit contributions through `Pull Requests`, following the
+[contributing
+guidelines](https://github.com/giabaio/R2jags/blob/devel/CONTRIBUTING.md).
+To report issues and/or seek support, please file a new ticket in the
+[issue](https://github.com/giabaio/R2jags/issues) tracker.
+
+Please note that this project is released with a [Contributor Code of
+Conduct](https://github.com/giabaio/R2jags/blob/devel/CONDUCT.md). By
+participating in this project you agree to abide by its terms.

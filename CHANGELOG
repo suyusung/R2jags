@@ -1,3 +1,7 @@
+2025-10-22 Gianluca Baio  <g.baio@ucl.ac.uk>
+   * Add `NEWS.md`, `README.Rmd` (which expands and completes the previous `README.md`), `CONTRIBUTING.md` and `CONDUCT.md`
+   * List changes to various files (see `NEWS.md`) in the development branch
+
 2024-10-12 Yu-Sung Su     <suyusung@tsinghua.edu.cn>
    * DESCRIPTION (Version, Date): 0.8-9
    * man/jags.Rd: fix the broken link of write.model

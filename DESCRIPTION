@@ -1,6 +1,6 @@
 Package: R2jags
-Version: 0.8-9
-Date: 2024-10-12
+Version: 0.8-10
+Date: 2025-10-22
 Title: Using R to Run 'JAGS'
 Authors@R: c(person("Yu-Sung", "Su", role =  c("aut", "cre"), 
 		      email = "suyusung@tsinghua.edu.cn", 
@@ -21,3 +21,4 @@ SystemRequirements: JAGS (http://mcmc-jags.sourceforge.net)
 Description: Providing wrapper functions to implement Bayesian analysis in JAGS.  Some major features include monitoring convergence of a MCMC model using Rubin and Gelman Rhat statistics, automatically running a MCMC model till it converges, and implementing parallel processing of a MCMC model for multiple chains.
 License: GPL (>= 2)
 NeedsCompilation: no
+RoxygenNote: 7.3.2
