@@ -1,3 +1,7 @@
+2026-6-20 Yu-Sung Su     <suyusung@tsinghua.edu.cn>
+   * DESCRIPTION (Version, Date): 0.9-0 Prepare for JAGS 5.0
+   * R/jags2.R: fix code for rjags 5.2 jags 5.0
+
 2025-10-22 Gianluca Baio  <g.baio@ucl.ac.uk>
    * Add `NEWS.md`, `README.Rmd` (which expands and completes the previous `README.md`), `CONTRIBUTING.md` and `CONDUCT.md`
    * List changes to various files (see `NEWS.md`) in the development branch
