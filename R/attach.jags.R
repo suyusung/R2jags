@@ -1,11 +1,12 @@
 ##' Attach/detach elements of \sQuote{JAGS} objects to search path
 ##' 
-##' These are wraper functions for \code{\link[R2WinBUGS]{attach.bugs}} and
-##' \code{\link[R2WinBUGS]{detach.bugs}}, which attach or detach
-##' three-way-simulation array of bugs object to the search path. See
-##' \code{\link[R2WinBUGS]{attach.all}} for details.
+##' These attach or detach the three-way-simulation array of a bugs object to the
+##' search path, so that the elements of \code{sims.list} can be referred to by
+##' name.  They do what \code{R2WinBUGS::attach.bugs} and
+##' \code{R2WinBUGS::detach.bugs} do, and until 0.9-0 the package carried a
+##' dependency on \pkg{R2WinBUGS} for their sake alone (issue #3).
 ##' 
-##' See \code{\link[R2WinBUGS]{attach.bugs}} for details
+##' See the examples in \code{\link{jags}} for the usage.
 ##' 
 ##' @aliases attach.jags detach.jags
 ##' @param x An \code{rjags} object.

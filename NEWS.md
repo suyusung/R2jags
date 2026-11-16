@@ -6,7 +6,9 @@ _November 2026_
 
 * The warning raised when a parameter's saved values are not the whole array now says so in those words instead of "error/missing in parameter", because saving part of an array -- the upper triangle of a matrix, say -- is a legitimate request. (#20)
 
-* `count_nodes()` compares classes with `inherits()`, and the help page link to `R2WinBUGS::write.model` carries its package anchor.
+* `count_nodes()` compares classes with `inherits()`.
+
+* `R2WinBUGS` is no longer a dependency. The four functions that came from it -- `monitor()` (the convergence summary behind every table), `write.model()`, `attach.bugs()` and `detach.bugs()` -- are now part of this package, with the S-PLUS branches dropped. Nothing else moved: `monitor()` is bit-identical to `R2WinBUGS::monitor()` across five draw sets and every combination of `keep.all`, `Rupper.keep` and `trans`, `write.model()` writes byte-identical files, and a seeded `jags()` call returns an identical summary. (#3)
 
 _Octoer 2025_
 
