@@ -60,7 +60,20 @@ as.bugs.array2 <- function(sims.array, model.file=NULL, program="jags",
           ## (for example, you don't want the array to have some of the
           ## parameters) so I took them out.
            if (length(long.short[[j]]) != length.short[j]){
-             warning(paste("error/missing in parameter", root.short[[j]],"in parameters.to.save, \n   Be aware of the output results.\n"), noBreaks.=TRUE)
+             ## The values saved for this parameter are not the full rectangular
+             ## array.  That is a legitimate thing to ask for -- network
+             ## meta-analysis models routinely save the upper triangle of a
+             ## contrast matrix -- so the message says what happened instead of
+             ## announcing an "error/missing" (issue #20).
+             warning(paste0("parameters.to.save names ", length(long.short[[j]]),
+                            " elements of the array '", root.short[[j]], "', which",
+                            " span ", length.short[j], " index combinations.\n",
+                            "   The summaries for '", root.short[[j]], "' cover the",
+                            " elements you named, not the whole\n   array.  That is",
+                            " expected when a model saves part of an array on purpose",
+                            " (the upper\n   triangle of a matrix, for instance) and is",
+                            " not an error; check it is what you meant.\n"),
+                     noBreaks. = TRUE)
            }
           indexes.short[[j]] <- as.list(numeric(length.short[j]))
           for (k in 1:length.short[j]){
