@@ -19,6 +19,27 @@
      README.rmd is renamed to the README.Rmd the 2025-10-22 entry already names.
    * tests/testthat: regression tests for the pD of 0 and for the partial-array
      warning.
+   * The package no longer depends on R2WinBUGS (issue #3).  monitor(), the
+     convergence summary every output table is built from, write.model(), which
+     writes a model given as an R function, and attach.bugs()/detach.bugs() were
+     all imported from it, so it sat in Imports for their sake alone.  They are
+     now implemented in R/monitor.R, R/write.model.R and R/attach.bugs.R, with
+     the S-PLUS branches dropped, and DESCRIPTION and NAMESPACE no longer mention
+     R2WinBUGS.  Nothing else moved: monitor() was compared with
+     R2WinBUGS::monitor() on five draw sets (multi-chain with mixed signs, all
+     positive, a single chain, proportions, and one whose draws never vary)
+     across every combination of 'keep.all', 'Rupper.keep' and 'trans'.  Every
+     comparison that ran was bit-identical, and where the input is outside the
+     domain both implementations fail identically.  write.model() writes
+     byte-identical files for three models, and the same seeded call to jags()
+     produces an identical summary matrix before and after the change.  The
+     numbers are pinned by tests/testthat/test-monitor.R and
+     tests/testthat/test-write-model.R, and the package was run end to end with
+     R2WinBUGS removed from the library to show it is genuinely gone.
+   * R/attach.jags.R, man/attach.jags.Rd, man/jags.Rd: the help pages describe
+     these functions as the package's own instead of linking to R2WinBUGS, which
+     is no longer a package they can link to; 'digits' in jags() points at
+     write.model() rather than at R2WinBUGS's.
 
 2026-6-20 Yu-Sung Su     <suyusung@tsinghua.edu.cn>
    * DESCRIPTION (Version, Date): 0.9-0 Prepare for JAGS 5.0
