@@ -75,7 +75,7 @@
 ##' displayed on the R console. Type \dQuote{gui} is a graphical progress bar
 ##' in a new window. The progress bar is suppressed if \code{progress.bar} is
 ##' \dQuote{none}. Default set globally to \dQuote{text}
-##' @param digits as in \code{\link{write.model}} in the \pkg{R2WinBUGS}
+##' @param digits as in \code{\link[R2WinBUGS]{write.model}} in the \pkg{R2WinBUGS}
 ##' package: number of significant digits used for \code{BUGS} input, see
 ##' \code{\link{formatC}}.  Only used if specifying a \code{BUGS} model as an R
 ##' function.
@@ -439,8 +439,12 @@ jags <- function( data, inits,
                            progress.bar   = progress.bar )
 
   # GB: Add call to 'rjags::dic.samples()' to add pD if the argument 'pD' is
-  # set to TRUE in the call to 'jags'
-  if(pD) {
+  # set to TRUE in the call to 'jags'.  The logical is kept in its own variable,
+  # because 'pD' is overwritten below with the penalty itself, which is a
+  # number: a penalty of exactly 0 then reads as "pD was not computed" (issue
+  # #24).
+  compute.pD <- pD
+  if(compute.pD) {
     if (is.null(n.iter.pd)) {n.iter.pd <- 1000}
     pDstuff <- rjags::dic.samples(
       model=m, n.iter=n.iter.pd, progress.bar="none", quiet=TRUE
@@ -465,8 +469,11 @@ jags <- function( data, inits,
   # GB: adds the running time to the 'fit' object (which will then be
   # renamed as 'BUGSoutput)
   fit$time2run <- toc[3]
-  # GB: *If it exists*, adds the pD and the resulting DIC to the 'fit' object
-  if(pD) {
+  # GB: *If it exists*, adds the pD and the resulting DIC to the 'fit' object.
+  # This asks whether pD was requested, not what it came out as: a penalty of 0
+  # is a result like any other, and storing it is what keeps pD and DIC2 in the
+  # output (issue #24).
+  if(compute.pD) {
     fit$pD <- pD
     fit$DIC2 <- DIC2
   }
