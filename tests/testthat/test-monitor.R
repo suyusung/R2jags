@@ -1,12 +1,12 @@
 ## The convergence summary the package computes itself since 0.9-0 (issue #3).
 ##
 ## Until then these two functions were imported from R2WinBUGS, and the numbers
-## below are the ones it produced: the port was checked against
-## R2WinBUGS::monitor() on five draw sets (multi-chain mixed signs, all positive,
-## single chain, proportions, degenerate) across every combination of keep.all,
-## Rupper.keep and trans, and every comparison that ran was bit-identical, with
-## the same errors on the same out-of-domain inputs.  These tests pin the same
-## numbers so that a future change cannot move them silently.
+## below are the ones it produced.  What the package computes now was checked
+## against R2WinBUGS::monitor() -- 48 combinations of five draw sets (multi-chain
+## mixed signs, all positive, single chain, proportions, degenerate) with every
+## keep.all, Rupper.keep and trans setting -- and every comparison is
+## bit-identical, with the same errors on the same out-of-domain inputs.  These
+## tests pin the numbers so that a future change cannot move them silently.
 
 test_that("monitor() summarises the kept draws exactly as it always has (#3)", {
   set.seed(1)

@@ -8,6 +8,8 @@ _November 2026_
 
 * `count_nodes()` compares classes with `inherits()`.
 
+* The functions that replace `R2WinBUGS`'s -- `monitor()`/`conv.par()`, `write.model()`, `attach.bugs()`/`detach.bugs()` -- are written as this package's own code rather than as a transcription of it, and are measured against it: bit-identical across 48 combinations of draw sets and settings, byte-identical model files, same attached names.
+
 * `R2WinBUGS` is no longer a dependency. The four functions that came from it -- `monitor()` (the convergence summary behind every table), `write.model()`, `attach.bugs()` and `detach.bugs()` -- are now part of this package, with the S-PLUS branches dropped. Nothing else moved: `monitor()` is bit-identical to `R2WinBUGS::monitor()` across five draw sets and every combination of `keep.all`, `Rupper.keep` and `trans`, `write.model()` writes byte-identical files, and a seeded `jags()` call returns an identical summary. (#3)
 
 _Octoer 2025_

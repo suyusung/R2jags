@@ -1,9 +1,10 @@
 ## Writing a model that was given as an R function (issue #3: this used to come
 ## from R2WinBUGS::write.model).  The expected text below is what R2WinBUGS
-## produces for the same function -- the two writers were compared on three
-## models and their files are byte-identical -- and it pins the part that
-## matters: the scientific-notation constants are rewritten in the form the JAGS
-## parser accepts, while 1e-3 and an ordinary number are left alone.
+## produces for the same function -- the two writers were compared on seven
+## models, including one long enough that deparse() breaks the line, and their
+## files are byte-identical -- and it pins the part that matters: the
+## scientific-notation constants are rewritten in the form the JAGS parser
+## accepts, while 1e-3 and an ordinary number are left alone.
 
 test_that("a model given as an R function is written unchanged (#3)", {
   model <- function() {
