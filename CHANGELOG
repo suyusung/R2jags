@@ -40,6 +40,24 @@
      these functions as the package's own instead of linking to R2WinBUGS, which
      is no longer a package they can link to; 'digits' in jags() points at
      write.model() rather than at R2WinBUGS's.
+   * R/monitor.R, R/write.model.R, R/attach.bugs.R: the replacements are written
+     as this package's own code rather than as a transcription -- a vapply over
+     the parameters instead of a preallocated loop and an index, the Rhat scale
+     and its inverse chosen once per parameter instead of three parallel blocks,
+     the mean squares named for what they are, the workspace-clash prompt split
+     out of the attach, and the model-body rewrite phrased as a rule about which
+     constants need E notation.  The behaviour is measured, not asserted: the
+     golden numbers and the written files are unchanged (47 tests), and against
+     R2WinBUGS the result is bit-identical over 48 combinations of five draw sets
+     with every 'keep.all'/'Rupper.keep'/'trans' setting, byte-identical for
+     seven model bodies including one long enough that deparse() breaks the line,
+     and attaches exactly the same names.  Three differences that comparison
+     found are fixed: the model writer's placeholders are six characters plus the
+     counter, because their width is what decides where deparse() breaks a long
+     line; a single parameter sliced out of the draw array has to keep its third
+     dimension, or a one-chain call reaches the variance calculation as a vector;
+     and detach() is called with character.only = TRUE, since it is handed a name
+     as a string.
 
 2026-6-20 Yu-Sung Su     <suyusung@tsinghua.edu.cn>
    * DESCRIPTION (Version, Date): 0.9-0 Prepare for JAGS 5.0

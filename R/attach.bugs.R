@@ -1,45 +1,52 @@
-## Attaching the draws to the search path, so that the elements of sims.list can
-## be referred to by name -- what attach.jags()/detach.jags() wrap.  Imported from
-## R2WinBUGS until 0.9-0 (issue #3); the S-PLUS branches are gone and the
-## behaviour is unchanged, including the "bugs.sims" name the entry is attached
-## under and the n.sims element added to sims.list for convenience.
+## Putting the draws of a fitted model on the search path, so that the elements of
+## sims.list can be referred to by name -- what attach.jags() and detach.jags()
+## wrap.  The entry goes on under "bugs.sims" and carries n.sims alongside the
+## draws, because that is what a caller of this package has always found there.
 
 attach.all <- function(x, overwrite = NA, name = "attach.all") {
-  masked <- names(x) %in% ls(.GlobalEnv)
-  if (!any(masked)) overwrite <- FALSE
-  masked <- names(x)[masked]
-  if (is.na(overwrite)) {
-    question <- paste("The following objects in .GlobalEnv will mask\n",
-                      "objects in the attached database:\n",
-                      paste(masked, collapse = ", "),
-                      "\nRemove these objects from .GlobalEnv?", sep = "")
-    if (interactive()) {
-      overwrite <- if (.Platform$OS.type == "windows")
-        "YES" == utils::winDialog(type = "yesno", question)
-      else 1 == utils::menu(c("YES", "NO"), graphics = FALSE, title = question)
-    } else {
-      overwrite <- FALSE
-    }
-  }
-  if (overwrite) remove(list = masked, envir = .GlobalEnv)
-  ## Deliberate, and the whole point of attach.jags(): the simulations go on the
-  ## search path so their elements can be referred to by name.  Spelled base:: so
-  ## that R CMD check's scan for attach() reads it as the conscious call it is.
+  clashing <- names(x)[names(x) %in% ls(.GlobalEnv)]
+  overwrite <- resolve.clashes(clashing, overwrite)
+  if (overwrite) remove(list = clashing, envir = .GlobalEnv)
+  ## Attaching is the point here, not an accident, which is why the call is
+  ## spelled base::attach: R CMD check's scan for attach() in package code reads
+  ## the plain form as one.
   base::attach(x, name = name)
 }
+
+
+## Whether objects of the same name in the workspace should be removed before
+## something is attached over them.  TRUE/FALSE settles it; NA asks, and only in
+## an interactive session -- a script gets no question and nothing is deleted.
+resolve.clashes <- function(clashing, overwrite) {
+  if (!length(clashing)) return(FALSE)
+  if (!is.na(overwrite)) return(overwrite)
+  if (!interactive()) return(FALSE)
+
+  question <- paste("The following objects in .GlobalEnv will mask\n",
+                    "objects in the attached database:\n",
+                    paste(clashing, collapse = ", "),
+                    "\nRemove these objects from .GlobalEnv?", sep = "")
+  if (.Platform$OS.type == "windows")
+    "YES" == utils::winDialog(type = "yesno", question)
+  else
+    1 == utils::menu(c("YES", "NO"), graphics = FALSE, title = question)
+}
+
 
 attach.bugs <- function(x, overwrite = NA) {
   if (!inherits(x, "bugs"))
     stop("attach.bugs() requires a bugs object.")
-  if ("bugs.sims" %in% search()) detach("bugs.sims")
-  x$sims.list$n.sims <- x$n.sims   # put n.sims into sims.list for convenience
-  r2 <- attach.all(x$sims.list, overwrite = overwrite, name = "bugs.sims")
-  invisible(r2)
+  if ("bugs.sims" %in% search()) detach.all("bugs.sims")
+  ## n.sims rides along with the draws for convenience
+  invisible(attach.all(c(x$sims.list, list(n.sims = x$n.sims)),
+                       overwrite = overwrite, name = "bugs.sims"))
 }
 
+
 detach.all <- function(name = "attach.all") {
-  do.call("detach", list(name = name))
+  detach(name = name, character.only = TRUE)
 }
+
 
 detach.bugs <- function() {
   detach.all("bugs.sims")

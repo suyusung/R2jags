@@ -1,50 +1,53 @@
-## Write a JAGS model that the user has given as an R function, the way
-## R2WinBUGS::write.model does and as ?jags documents for the model.file
-## argument.  Imported from R2WinBUGS until 0.9-0 (issue #3); the S-PLUS branch
-## is gone and the output is unchanged -- tests/testthat/test-write-model.R
-## writes the same models through both and compares the files.
+## Write a JAGS model that the user has given as an R function, the form ?jags
+## documents for the model.file argument.  The model language wants a small or
+## large constant written as 1.00000E-06 where R writes 1e-06, so the body is
+## rewritten on its way out.  What is written is what R2WinBUGS::write.model
+## writes, and tests/testthat/test-write-model.R pins it.
 
 write.model <- function(model, con = "model.bug", digits = 5) {
-  model.text <- c("model", replaceScientificNotationR(body(model), digits = digits))
-  ## "a %_% b" is the R2WinBUGS way of writing "a b" in a model, which the
-  ## R parser would not otherwise accept.
-  model.text <- gsub("%_%", "", model.text)
-  writeLines(model.text, con = con)
+  ## "a %_% b" is how a model says "a b": dropping the spacer leaves a space
+  ## where the R parser would otherwise not allow one.
+  writeLines(gsub("%_%", "", c("model", model.lines(body(model), digits = digits))),
+             con = con)
 }
 
 
-## Rewrite the numeric constants of a model body in the notation the JAGS parser
-## accepts: R deparses a small or large number as 1e-05, and the model language
-## wants 1.0E-5.  Each constant is replaced by a placeholder name first, the body
-## is deparsed whole, and the placeholders are then substituted back, so that
-## deparse() cannot undo the formatting.
-replaceScientificNotationR <- function(bmodel, digits = 5) {
-  env <- new.env()
-  assign("rSNRidCounter", 0, envir = env)
+## The body of a model function as character lines, with every numeric constant
+## that is very small or very large already in E notation.
+##
+## The constants cannot simply be formatted where they are: deparse() prints a
+## double the way R writes numbers, whatever form it was handed, so a formatted
+## constant would come back as 1e-06.  Each one is therefore parked under a short
+## name, the body is deparsed whole, and the parked text is substituted back.
+## Short names matter: deparse() decides where to break lines from the width of
+## what it prints, and long placeholders would move the breaks.
+model.lines <- function(expr, digits = 5) {
+  parked <- new.env(parent = emptyenv())
+  park <- function(value) {
+    ## Six characters and the counter, no more: deparse() breaks lines by the
+    ## width of what it prints, and the placeholders decide where the breaks fall
+    ## in the text that gets written.
+    id <- paste0("R2jags", length(ls(parked)) + 1L)
+    assign(id, formatC(value, digits = digits, format = "E"), envir = parked)
+    id      # a string, so deparse() prints it quoted and it can be found again
+  }
+  needs.e.notation <- function(value) abs(value) < 1e-3 || abs(value) > 1e4
 
-  replaceID <- function(bmodel, env, digits = 5) {
-    for (i in seq_along(bmodel)) {
-      if (length(bmodel[[i]]) == 1) {
-        ## ':', '[' and '[[' keep their meaning: only numbers are formatted.
-        if (as.character(bmodel[[i]]) %in% c(":", "[", "[[")) return(bmodel)
-        if ((typeof(bmodel[[i]]) %in% c("double", "integer")) &&
-            ((abs(bmodel[[i]]) < 1e-3) || (abs(bmodel[[i]]) > 1e+4))) {
-          counter <- get("rSNRidCounter", envir = env) + 1
-          assign("rSNRidCounter", counter, envir = env)
-          id <- paste("rSNRid", counter, sep = "")
-          assign(id, formatC(bmodel[[i]], digits = digits, format = "E"), envir = env)
-          bmodel[[i]] <- id
-        }
-      } else {
-        bmodel[[i]] <- replaceID(bmodel[[i]], env, digits = digits)
-      }
+  rewrite <- function(expr) {
+    if (is.numeric(expr) && length(expr) == 1L) {
+      if (needs.e.notation(expr)) return(park(expr))
+      return(expr)
     }
-    bmodel
+    if (is.call(expr)) {
+      ## an index is left exactly as it was written
+      if (as.character(expr[[1L]]) %in% c("[", "[[", ":")) return(expr)
+      for (i in seq_along(expr)) expr[[i]] <- rewrite(expr[[i]])
+    }
+    expr
   }
 
-  bmodel <- deparse(replaceID(bmodel, env, digits = digits), control = NULL)
-  for (i in ls(env)) {
-    bmodel <- gsub(paste('"', i, '"', sep = ''), get(i, envir = env), bmodel, fixed = TRUE)
-  }
-  bmodel
+  lines <- deparse(rewrite(expr), control = NULL)
+  for (id in ls(parked))
+    lines <- gsub(paste0('"', id, '"'), get(id, envir = parked), lines, fixed = TRUE)
+  lines
 }
