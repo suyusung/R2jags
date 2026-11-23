@@ -1,5 +1,3 @@
-##' @rdname jags
-##' @export
 jags2 <- function (data, inits, parameters.to.save, model.file = "model.bug",
   n.chains = 3, n.iter = 2000, n.burnin = floor(n.iter/2),
   n.thin = max(1, floor((n.iter - n.burnin)/1000)),
@@ -24,28 +22,39 @@ jags2 <- function (data, inits, parameters.to.save, model.file = "model.bug",
 
 
   if(is.list(data)){
+    ## data is a named list: put elements into local env then dump
     data.list <- data
-    lapply(data.list, dump, append=TRUE, file="jagsdata.txt", envir=parent.frame(1))
+    j2env <- environment()
+    list2env(data.list, envir = j2env)
+    lapply(names(data.list), dump, append=FALSE,
+           file = "jagsdata.txt", envir = j2env)
+    data <- read.jagsdata("jagsdata.txt")
   }
   else{
     if (!(length(data) == 1 && is.vector(data) && is.character(data) &&
           (regexpr("\\.txt$", data) > 0))) {
+      ## data holds variable names; retrieve from caller and dump
       data.list <- lapply(as.list(data), get, pos = parent.frame(1))
       names(data.list) <- as.list(data)
+      j2env <- environment()
+      list2env(data.list, envir = j2env)
+      lapply(names(data.list), dump, append=FALSE,
+             file = "jagsdata.txt", envir = j2env)
+      data <- read.jagsdata("jagsdata.txt")
     }
     else {
+      ## data is a .txt file path; use directly
       if (all(basename(data) == data)) {
-        try(file.copy(file.path(working.directory, data), data, overwrite = TRUE))
+        try(file.copy(file.path(working.directory, data), data,
+                      overwrite = TRUE))
       }
       if (!file.exists(data)) {
         stop("File", data, "does not exist.")
       }
       data.list <- data
+      data <- read.jagsdata(data)
     }
-
   }
-  lapply(names(data.list), dump, append=TRUE, file="jagsdata.txt")
-  data <- read.jagsdata("jagsdata.txt")
 
   if (is.function(model.file)) {
     temp <- tempfile("model")

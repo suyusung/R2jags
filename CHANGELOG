@@ -1,3 +1,68 @@
+2026-11-16 Yu-Sung Su     <suyusung@tsinghua.edu.cn>
+   * R/jags.R: a pD of exactly 0 no longer drops pD and DIC2 from the output
+     object.  'pD' is the logical argument and it was overwritten with the
+     computed penalty, so the final 'if (pD)' read a penalty of 0 as "pD was not
+     computed" (issue #24).
+   * R/as.bugs.array2.R: the "error/missing in parameter" warning -- raised when
+     only some elements of an array are saved, as network meta-analysis models do
+     with the upper triangle of a contrast matrix -- now says what happened and
+     that it is not an error (issue #20).
+   * R/get.compilation.R: compares classes with inherits() rather than class().
+   * R/jags.R, man/jags.Rd: the link to R2WinBUGS::write.model carries its
+     package anchor, which is what R CMD check asked for.
+   * DESCRIPTION: drop the Packaged, Repository and Date/Publication fields.
+     CRAN adds them, and their presence here means the file was copied from a
+     published tarball; restore the RoxygenNote field they displaced and update
+     Date.  The License string is left as published (GPL (> 2)).
+   * .Rbuildignore, README.Rmd: the repository's CONDUCT.md, CONTRIBUTING.md and
+     README.Rmd are not package files, so the tarball no longer carries them;
+     README.rmd is renamed to the README.Rmd the 2025-10-22 entry already names.
+   * tests/testthat: regression tests for the pD of 0 and for the partial-array
+     warning.
+   * The package no longer depends on R2WinBUGS (issue #3).  monitor(), the
+     convergence summary every output table is built from, write.model(), which
+     writes a model given as an R function, and attach.bugs()/detach.bugs() were
+     all imported from it, so it sat in Imports for their sake alone.  They are
+     now implemented in R/monitor.R, R/write.model.R and R/attach.bugs.R, with
+     the S-PLUS branches dropped, and DESCRIPTION and NAMESPACE no longer mention
+     R2WinBUGS.  Nothing else moved: monitor() was compared with
+     R2WinBUGS::monitor() on five draw sets (multi-chain with mixed signs, all
+     positive, a single chain, proportions, and one whose draws never vary)
+     across every combination of 'keep.all', 'Rupper.keep' and 'trans'.  Every
+     comparison that ran was bit-identical, and where the input is outside the
+     domain both implementations fail identically.  write.model() writes
+     byte-identical files for three models, and the same seeded call to jags()
+     produces an identical summary matrix before and after the change.  The
+     numbers are pinned by tests/testthat/test-monitor.R and
+     tests/testthat/test-write-model.R, and the package was run end to end with
+     R2WinBUGS removed from the library to show it is genuinely gone.
+   * R/attach.jags.R, man/attach.jags.Rd, man/jags.Rd: the help pages describe
+     these functions as the package's own instead of linking to R2WinBUGS, which
+     is no longer a package they can link to; 'digits' in jags() points at
+     write.model() rather than at R2WinBUGS's.
+   * R/monitor.R, R/write.model.R, R/attach.bugs.R: the replacements are written
+     as this package's own code rather than as a transcription -- a vapply over
+     the parameters instead of a preallocated loop and an index, the Rhat scale
+     and its inverse chosen once per parameter instead of three parallel blocks,
+     the mean squares named for what they are, the workspace-clash prompt split
+     out of the attach, and the model-body rewrite phrased as a rule about which
+     constants need E notation.  The behaviour is measured, not asserted: the
+     golden numbers and the written files are unchanged (47 tests), and against
+     R2WinBUGS the result is bit-identical over 48 combinations of five draw sets
+     with every 'keep.all'/'Rupper.keep'/'trans' setting, byte-identical for
+     seven model bodies including one long enough that deparse() breaks the line,
+     and attaches exactly the same names.  Three differences that comparison
+     found are fixed: the model writer's placeholders are six characters plus the
+     counter, because their width is what decides where deparse() breaks a long
+     line; a single parameter sliced out of the draw array has to keep its third
+     dimension, or a one-chain call reaches the variance calculation as a vector;
+     and detach() is called with character.only = TRUE, since it is handed a name
+     as a string.
+
+2026-6-20 Yu-Sung Su     <suyusung@tsinghua.edu.cn>
+   * DESCRIPTION (Version, Date): 0.9-0 Prepare for JAGS 5.0
+   * R/jags2.R: fix code for rjags 5.2 jags 5.0
+
 2025-10-22 Gianluca Baio  <g.baio@ucl.ac.uk>
    * Add `NEWS.md`, `README.Rmd` (which expands and completes the previous `README.md`), `CONTRIBUTING.md` and `CONDUCT.md`
    * List changes to various files (see `NEWS.md`) in the development branch

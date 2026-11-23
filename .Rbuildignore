@@ -12,6 +12,10 @@
 ^\.lintr$
 ^\.Rapp.history$
 ^\.Rbuildignore$
+^CONDUCT\.md$
+^CONTRIBUTING\.md$
+^README\.Rmd$
+^tests/testthat/_problems$
 ^\.Rhistory$
 ^\.Rproj\.user$
 ^_pkgdown\.yml$

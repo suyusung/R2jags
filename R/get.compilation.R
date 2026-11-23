@@ -36,9 +36,9 @@
 count_nodes=function(x,...) {
   # First checks what type of object we have here. Could be a 'jags' (as from
   # the 'rjags' package), or, most likely, a 'rjags' object (from 'R2jags')
-  if(class(x)=="jags") {
+  if(inherits(x, "jags")) {
     x=list(model=x)
-  } else if (class(x)=="rjags") {
+  } else if (inherits(x, "rjags")) {
     x=x
   } else {
     stop("The input x must be either a 'jags' (processed by the package 'rjags') or an 'rjags' (processed by the package 'R2jags') object.")

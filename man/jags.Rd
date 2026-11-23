@@ -132,7 +132,8 @@ displayed on the R console. Type \dQuote{gui} is a graphical progress bar
 in a new window. The progress bar is suppressed if \code{progress.bar} is
 \dQuote{none}. Default set globally to \dQuote{text}}
 
-\item{digits}{as in \code{\link{write.model}} in the \pkg{R2WinBUGS}
+\item{digits}{as in \code{write.model}, the helper that writes a model given
+as an R function:
 package: number of significant digits used for \code{BUGS} input, see
 \code{\link{formatC}}.  Only used if specifying a \code{BUGS} model as an R
 function.}
