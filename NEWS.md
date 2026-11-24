@@ -1,4 +1,4 @@
-# R2jags 0.9-0 (dev)
+# R2jags 0.9-0
 
 _November 2026_
 

@@ -157,22 +157,6 @@ Default set globally to \dQuote{FALSE}}
 categorical parameters and returns a \code{sim.list} with NA values if
 detected. It's recommended to supply \code{jags()} with complete data.}
 
-\item{jags.path}{directory that contains the \code{JAGS} executable.  The
-default is \dQuote{}.}
-
-\item{clearWD}{indicating whether the files \file{data.txt},
-\file{inits[1:n.chains].txt}, \file{codaIndex.txt}, \file{jagsscript.txt},
-and \file{CODAchain[1:nchains].txt} should be removed after \code{jags} has
-finished, default=TRUE.}
-
-\item{n.cluster}{number of clusters to use to run parallel chains.  Default
-equals n.chains.}
-
-\item{export_obj_names}{character vector of objects to export to the
-clusters.}
-
-\item{envir}{default is .GlobalEnv}
-
 \item{initrep}{number of replicate samples that JAGS draws from the prior
 when it initializes unobserved stochastic nodes automatically; passed on
 to \code{rjags::jags.model()}. With \code{initrep = 1} the initial values
@@ -192,6 +176,22 @@ process. The default \code{NULL} does not pass the argument at all, leaving
 the choice to \code{rjags}, whose own default (\code{n.chains}) already
 gives one thread per chain. Requires \code{rjags} (>= 5.0) with JAGS
 (>= 5.0.0).}
+
+\item{jags.path}{directory that contains the \code{JAGS} executable.  The
+default is \dQuote{}.}
+
+\item{clearWD}{indicating whether the files \file{data.txt},
+\file{inits[1:n.chains].txt}, \file{codaIndex.txt}, \file{jagsscript.txt},
+and \file{CODAchain[1:nchains].txt} should be removed after \code{jags} has
+finished, default=TRUE.}
+
+\item{n.cluster}{number of clusters to use to run parallel chains.  Default
+equals n.chains.}
+
+\item{export_obj_names}{character vector of objects to export to the
+clusters.}
+
+\item{envir}{default is .GlobalEnv}
 }
 \description{
 The \code{jags} function takes data and starting values as input.  It
