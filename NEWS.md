@@ -2,6 +2,8 @@
 
 _November 2026_
 
+* `jags()` and `jags.parallel()` gained an `initrep` argument, passed on to `rjags::jags.model()`: the number of replicate samples JAGS 5 draws from the prior when it initializes unobserved stochastic nodes automatically (#27). `initrep = 1` draws the initial values themselves from the prior; a vector of length 2 activates JAGS's expert mode. The default `NULL` does not pass the argument at all, leaving the choice to `rjags` and keeping installations on rjags 4-x working untouched.
+
 * `jags(pD = TRUE)` keeps `pD` and `DIC2` in its output when the penalty is exactly 0: the logical argument was overwritten by the computed penalty, and `if (pD)` then read a 0 as "not computed". (#24)
 
 * The warning raised when a parameter's saved values are not the whole array now says so in those words instead of "error/missing in parameter", because saving part of an array -- the upper triangle of a matrix, say -- is a legitimate request. (#20)

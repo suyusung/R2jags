@@ -94,6 +94,16 @@
 ##' @param checkMissing Default: FALSE. When TRUE, checks for missing data in
 ##' categorical parameters and returns a \code{sim.list} with NA values if
 ##' detected. It's recommended to supply \code{jags()} with complete data.
+##' @param initrep number of replicate samples that JAGS draws from the prior
+##' when it initializes unobserved stochastic nodes automatically; passed on
+##' to \code{rjags::jags.model()}. With \code{initrep = 1} the initial values
+##' are drawn directly from the prior; larger values concentrate them around
+##' the prior mean (unbounded continuous nodes) or the prior mode (discrete
+##' and bounded nodes). The default \code{NULL} does not pass the argument at
+##' all, leaving the choice to \code{rjags}, whose own default (10000) mimics
+##' the deterministic "typical values" of JAGS before 5.0.0. A numeric vector
+##' of length 2 activates JAGS's expert mode; see the JAGS user manual.
+##' Requires rjags >= 5.0 and JAGS >= 5.0.0.
 ##' @author Yu-Sung Su \email{suyusung@@tsinghua.edu.cn}, Masanao Yajima
 ##' \email{yajima@@bu.edu}, Gianluca Baio \email{g.baio@@ucl.ac.uk}
 ##' @references Plummer, Martyn (2003) \dQuote{JAGS: A program for analysis of
@@ -262,7 +272,8 @@ jags <- function( data, inits,
                   RNGname = c("Wichmann-Hill", "Marsaglia-Multicarry", "Super-Duper", "Mersenne-Twister"),
                   jags.module = c("glm","dic"),
                   quiet,
-                  checkMissing = FALSE
+                  checkMissing = FALSE,
+                  initrep = NULL
                   )
 {
   #require( rjags )
@@ -407,13 +418,22 @@ jags <- function( data, inits,
     }
    }
 
-  # Compiles the model object
-  m <- jags.model(model.file,
-                  data     = data,
-                  inits    = init.values,
-                  n.chains = n.chains,
-                  n.adapt  = 0,
-                  quiet = quiet )
+  # Compiles the model object. 'initrep' (issue #27) is JAGS 5's control for
+  # the automatic initialization of unobserved stochastic nodes: it is passed
+  # on only when the user asks for it, so that setups still running an rjags
+  # without the argument (rjags 4-x) are left untouched by default.
+  model.args <- list(
+    file     = model.file,
+    data     = data,
+    inits    = init.values,
+    n.chains = n.chains,
+    n.adapt  = 0,
+    quiet    = quiet
+  )
+  if (!is.null(initrep)) {
+    model.args$initrep <- .check.initrep(initrep)
+  }
+  m <- do.call(jags.model, model.args)
   
   # Adds adaptation. This never needs to be verbose, so force
   # 'progress.bar' to 'none' and 'quiet' to TRUE, irrespective of what the
@@ -488,4 +508,18 @@ jags <- function( data, inits,
 
   class(out) <- "rjags"
   return(out)
+}
+
+## Internal: validate the 'initrep' argument of jags() and jags.parallel()
+## (issue #27) before it reaches rjags::jags.model(). Accepts a numeric
+## vector of length 1, or length 2 for JAGS's expert mode (see the JAGS user
+## manual), all values finite and at least 1. Returns it as integer, which is
+## what JAGS counts the prior replicates in.
+.check.initrep <- function(initrep) {
+  if (!is.numeric(initrep) || !(length(initrep) %in% 1:2) ||
+      any(!is.finite(initrep)) || any(initrep < 1)) {
+    stop("'initrep' must be NULL, or a numeric vector of length 1 or 2 ",
+         "with all values >= 1")
+  }
+  as.integer(initrep)
 }
