@@ -104,6 +104,14 @@
 ##' the deterministic "typical values" of JAGS before 5.0.0. A numeric vector
 ##' of length 2 activates JAGS's expert mode; see the JAGS user manual.
 ##' Requires rjags >= 5.0 and JAGS >= 5.0.0.
+##' @param n.threads number of threads that JAGS uses for sampling, passed on
+##' to \code{rjags::jags.model()}. Introduced in JAGS 5, this parallelizes the
+##' sampler manager across chains within one compiled model, and is a different
+##' mechanism from \code{jags.parallel()}, which runs each chain in its own R
+##' process. The default \code{NULL} does not pass the argument at all, leaving
+##' the choice to \code{rjags}, whose own default (\code{n.chains}) already
+##' gives one thread per chain. Requires \code{rjags} (>= 5.0) with JAGS
+##' (>= 5.0.0).
 ##' @author Yu-Sung Su \email{suyusung@@tsinghua.edu.cn}, Masanao Yajima
 ##' \email{yajima@@bu.edu}, Gianluca Baio \email{g.baio@@ucl.ac.uk}
 ##' @references Plummer, Martyn (2003) \dQuote{JAGS: A program for analysis of
@@ -273,7 +281,8 @@ jags <- function( data, inits,
                   jags.module = c("glm","dic"),
                   quiet,
                   checkMissing = FALSE,
-                  initrep = NULL
+                  initrep = NULL,
+                  n.threads = NULL
                   )
 {
   #require( rjags )
@@ -433,6 +442,9 @@ jags <- function( data, inits,
   if (!is.null(initrep)) {
     model.args$initrep <- .check.initrep(initrep)
   }
+  if (!is.null(n.threads)) {
+    model.args$n.threads <- .check.n.threads(n.threads)
+  }
   m <- do.call(jags.model, model.args)
   
   # Adds adaptation. This never needs to be verbose, so force
@@ -519,7 +531,18 @@ jags <- function( data, inits,
   if (!is.numeric(initrep) || !(length(initrep) %in% 1:2) ||
       any(!is.finite(initrep)) || any(initrep < 1)) {
     stop("'initrep' must be NULL, or a numeric vector of length 1 or 2 ",
-         "with all values >= 1")
+         "of finite values >= 1", call. = FALSE)
   }
   as.integer(initrep)
+}
+
+## Internal: validate the 'n.threads' argument of jags() and jags.parallel()
+## A single count of sampling threads; NULL is handled by the caller.
+.check.n.threads <- function(n.threads) {
+  if (!is.numeric(n.threads) || length(n.threads) != 1L ||
+      !is.finite(n.threads) || n.threads < 1) {
+    stop("'n.threads' must be NULL, or a single finite number >= 1",
+         call. = FALSE)
+  }
+  as.integer(n.threads)
 }

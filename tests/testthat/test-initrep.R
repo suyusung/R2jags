@@ -101,3 +101,66 @@ test_that("invalid initrep is rejected before the model is compiled (#27)", {
                  "'initrep'", info = paste(format(bad), collapse = "/"))
   }
 })
+
+## 'n.threads' is the other rjags 5 / JAGS 5 argument surfaced by issue #27.
+
+skip_if_no_n_threads <- function() {
+  testthat::skip_if_not_installed("rjags")
+  if (!"n.threads" %in% names(formals(rjags::jags.model))) {
+    testthat::skip("installed rjags::jags.model() has no 'n.threads' argument")
+  }
+}
+
+test_that("jags() forwards n.threads to rjags::jags.model()", {
+  skip_if_no_n_threads()
+  args <- schools_args(n.threads = 2)
+  seen <- with_jags.model_spy(function(seen) {
+    suppressWarnings(suppressMessages(do.call(jags, args)))
+    seen
+  })
+  expect_identical(seen$args$n.threads, 2L)
+})
+
+test_that("jags() does not pass n.threads by default", {
+  skip_if_no_n_threads()
+  ## NULL must leave rjags in charge (its default is n.threads = n.chains),
+  ## and must not break an rjags that has no 'n.threads' argument at all.
+  args <- schools_args()
+  seen <- with_jags.model_spy(function(seen) {
+    suppressWarnings(suppressMessages(do.call(jags, args)))
+    seen
+  })
+  expect_null(seen$args$n.threads)
+})
+
+test_that("n.threads = 2 runs end to end and returns samples", {
+  skip_if_no_n_threads()
+  fit <- suppressWarnings(suppressMessages(
+    do.call(jags, schools_args(n.threads = 2))))
+  expect_true(inherits(fit, "rjags"))
+  expect_gt(nrow(fit$BUGSoutput$sims.list$mu), 0)
+})
+
+test_that("invalid n.threads is rejected before the model is compiled", {
+  skip_if_no_n_threads()
+  for (bad in list(0, -1, c(1, 2), "a", NA, NaN, Inf)) {
+    args <- schools_args(n.threads = bad)
+    expect_error(suppressWarnings(suppressMessages(do.call(jags, args))),
+                 "'n.threads'", info = paste(format(bad), collapse = "/"))
+  }
+})
+
+test_that("jags.parallel() validates n.threads before spawning workers", {
+  ## Rejection happens before makeCluster(), so this needs no JAGS at all.
+  for (bad in list(0, -1, c(1, 2), "a", NA, NaN, Inf)) {
+    expect_error(
+      suppressWarnings(suppressMessages(
+        jags.parallel(data = list(J = 8.0),
+                      inits = function() list(mu = 0),
+                      parameters.to.save = "mu",
+                      model.file = system.file(package = "R2jags", "model",
+                                               "schools.txt"),
+                      n.threads = bad))),
+      "'n.threads'", info = paste(format(bad), collapse = "/"))
+  }
+})

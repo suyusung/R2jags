@@ -7,11 +7,15 @@ jags.parallel <- function (data, inits, parameters.to.save, model.file = "model.
     DIC = TRUE, working.directory = NULL, jags.seed = 123, digits = 5,
     RNGname = c("Wichmann-Hill", "Marsaglia-Multicarry", "Super-Duper",
         "Mersenne-Twister"), jags.module = c("glm", "dic"),  export_obj_names=NULL, envir = .GlobalEnv,
-    initrep = NULL)
+    initrep = NULL,
+    n.threads = NULL)
 {
     ## Validate before spawning anything (issue #27); jags() checks again.
     if (!is.null(initrep)) {
         .check.initrep(initrep)
+    }
+    if (!is.null(n.threads)) {
+        .check.n.threads(n.threads)
     }
     jags.params <- parameters.to.save
     jags.inits <- if (missing(inits)) {
@@ -66,7 +70,8 @@ jags.parallel <- function (data, inits, parameters.to.save, model.file = "model.
             jags.seed = eval(expression(jags.seed)), progress.bar = "none",
             digits = eval(expression(digits)), RNGname = eval(expression(RNGname)),
             jags.module = eval(expression(jags.module)),
-            initrep = eval(expression(initrep)) )
+            initrep = eval(expression(initrep)),
+            n.threads = eval(expression(n.threads)) )
         return(jagsfit)
     }
     cl <- makeCluster(n.cluster, methods = FALSE)
