@@ -30,7 +30,9 @@ jags(
   RNGname = c("Wichmann-Hill", "Marsaglia-Multicarry", "Super-Duper", "Mersenne-Twister"),
   jags.module = c("glm", "dic"),
   quiet,
-  checkMissing = FALSE
+  checkMissing = FALSE,
+  initrep = NULL,
+  n.threads = NULL
 )
 
 jags2(
@@ -66,7 +68,9 @@ jags.parallel(
   RNGname = c("Wichmann-Hill", "Marsaglia-Multicarry", "Super-Duper", "Mersenne-Twister"),
   jags.module = c("glm", "dic"),
   export_obj_names = NULL,
-  envir = .GlobalEnv
+  envir = .GlobalEnv,
+  initrep = NULL,
+  n.threads = NULL
 )
 }
 \arguments{
@@ -168,6 +172,26 @@ equals n.chains.}
 clusters.}
 
 \item{envir}{default is .GlobalEnv}
+
+\item{initrep}{number of replicate samples that JAGS draws from the prior
+when it initializes unobserved stochastic nodes automatically; passed on
+to \code{rjags::jags.model()}. With \code{initrep = 1} the initial values
+are drawn directly from the prior; larger values concentrate them around
+the prior mean (unbounded continuous nodes) or the prior mode (discrete
+and bounded nodes). The default \code{NULL} does not pass the argument at
+all, leaving the choice to \code{rjags}, whose own default (10000) mimics
+the deterministic "typical values" of JAGS before 5.0.0. A numeric vector
+of length 2 activates JAGS's expert mode; see the JAGS user manual.
+Requires rjags >= 5.0 and JAGS >= 5.0.0.}
+
+\item{n.threads}{number of threads that JAGS uses for sampling, passed on
+to \code{rjags::jags.model()}. Introduced in JAGS 5, this parallelizes the
+sampler manager across chains within one compiled model, and is a different
+mechanism from \code{jags.parallel()}, which runs each chain in its own R
+process. The default \code{NULL} does not pass the argument at all, leaving
+the choice to \code{rjags}, whose own default (\code{n.chains}) already
+gives one thread per chain. Requires \code{rjags} (>= 5.0) with JAGS
+(>= 5.0.0).}
 }
 \description{
 The \code{jags} function takes data and starting values as input.  It
