@@ -2,22 +2,31 @@
 # Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
 on:
   push:
-    branches: [main, master]
+    branches: [main, master, devel]
   pull_request:
     branches: [main, master]
+  workflow_dispatch:
 
 name: R-CMD-check
+
+# A new push to the same branch cancels the previous run
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   R-CMD-check:
     runs-on: ${{ matrix.config.os }}
     name: ${{ matrix.config.os }} (${{ matrix.config.r }})
+    timeout-minutes: 60
+    # macOS runners are often unavailable: don't let them fail the whole run
+    continue-on-error: ${{ startsWith(matrix.config.os, 'macos') }}
 
     strategy:
       fail-fast: false
       matrix:
         config:
-          - {os: macOS-latest,   r: 'release'}
+          - {os: macos-latest,   r: 'release'}
           - {os: windows-latest, r: 'release'}
           - {os: ubuntu-latest,  r: 'devel', http-user-agent: 'release'}
           - {os: ubuntu-latest,  r: 'release'}
@@ -28,7 +37,7 @@ jobs:
       R_KEEP_PKG_SOURCE: yes
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - uses: r-lib/actions/setup-r@v2
         with:
@@ -38,34 +47,33 @@ jobs:
 
       - uses: r-lib/actions/setup-pandoc@v2
 
-      # Ubuntu: apt install JAGS
+      # JAGS 5 is required by rjags >= 5-2 (and thus by R2jags)
+      # Ubuntu: JAGS 5 from the CRAN Ubuntu apt repository (the default Ubuntu package is 4.3.2)
       - name: Install JAGS (ubuntu)
         if: runner.os == 'Linux'
         run: |
+          wget -qO- https://cloud.r-project.org/bin/linux/ubuntu/marutter_pubkey.asc | sudo tee /etc/apt/trusted.gpg.d/cran_ubuntu_key.asc
+          echo "deb https://cloud.r-project.org/bin/linux/ubuntu $(lsb_release -cs)-cran40/" | sudo tee /etc/apt/sources.list.d/cran-jags.list
           sudo apt-get update -y
           sudo apt-get install -y jags
+          pkg-config --modversion jags
 
-      # macOS: fix library + module path
+      # macOS: JAGS 5 installer (as used by r-universe)
       - name: Install JAGS (macOS)
         if: runner.os == 'macOS'
         run: |
-          brew install jags pkg-config
-          JAGS_PREFIX=$(brew --prefix jags)
-          sudo mkdir -p /usr/local/lib
-          sudo ln -sf ${JAGS_PREFIX}/lib/libjags.* /usr/local/lib/ || true
-          sudo ln -sfn ${JAGS_PREFIX}/lib/JAGS /usr/local/lib/JAGS || true
-          ls -R /usr/local/lib/JAGS
+          curl --retry 3 -fsSL -O https://github.com/r-universe-org/actions/releases/download/JAGS-5/JAGS-5.0.2-vecLib-single-universal.pkg
+          sudo installer -pkg JAGS-5.0.2-vecLib-single-universal.pkg -target /
+          rm -f JAGS-5.0.2-vecLib-single-universal.pkg
 
-      # Windows: silent install JAGS 4.3.1 manually
+      # Windows: JAGS 5 installer (as used by r-universe)
       - name: Install JAGS (Windows)
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
-          $url = "https://downloads.sourceforge.net/project/mcmc-jags/JAGS/4.x/Windows/JAGS-4.3.1.exe"
-          curl.exe -L -o JAGS.exe $url
-          Start-Process -FilePath .\JAGS.exe -ArgumentList "/S" -NoNewWindow -Wait
+          curl.exe -sSL -o JAGS.exe https://github.com/r-universe-org/actions/releases/download/JAGS-5/JAGS-5.0.2-x86_64.exe
+          Start-Process -FilePath .\JAGS.exe -ArgumentList "/S","/AllUsers" -NoNewWindow -Wait
           Remove-Item .\JAGS.exe -Force
-          Get-ChildItem "C:\Program Files" | Where-Object { $_.Name -match "JAGS" }
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
@@ -73,7 +81,21 @@ jobs:
           extra-packages: |
             rcmdcheck
 
+      # The CRAN Windows binary of rjags crashes with this JAGS build: compile rjags from source
+      - name: Build rjags from source (Windows)
+        if: runner.os == 'Windows'
+        shell: Rscript {0}
+        run: install.packages("rjags", type="source", repos="https://cloud.r-project.org")
+
+      # Quick check that rjags can compile and run a model before R CMD check
+      - name: Test JAGS
+        shell: Rscript {0}
+        run: |
+          library(rjags)
+          f=tempfile(); writeLines("model{ x ~ dnorm(0,1) }", f)
+          m=jags.model(f, n.chains=3, n.threads=1); update(m, 10); cat("3 chains, 1 thread: OK\n")
+          m=jags.model(f, n.chains=3); update(m, 10); cat("3 chains, 3 threads: OK\n")
+
       - uses: r-lib/actions/check-r-package@v2
         with:
           upload-snapshots: true
-
