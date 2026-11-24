@@ -13,11 +13,9 @@
 ##' To run: \enumerate{ \item Write a \code{JAGS} model in an ASCII file.
 ##' \item Go into \R.  \item Prepare the inputs for the \code{jags} function
 ##' and run it (see Example section).  \item The model will now run in
-##' \code{JAGS}. It might take awhile. You will see things happening in the R
+##' \code{JAGS}. It might take a while. You will see things happening in the R
 ##' console.  }
-##' 
-##' % BUGS version support: % \itemize{ % \item \pkg{jags} 1.0.3 {default} % }
-##' 
+##'
 ##' @name jags
 ##' @aliases rjags-class rjags.parallel-class jags jags2 jags.parallel
 ##' @docType class
@@ -41,7 +39,7 @@
 ##' @param n.burnin length of burn in, i.e. number of iterations to discard at
 ##' the beginning. Default is \code{n.iter/2}, that is, discarding the first
 ##' half of the simulations. If n.burnin is 0, \code{jags()} will run 100
-##' iterations for adaption.
+##' iterations for adaptation.
 ##' @param n.cluster number of clusters to use to run parallel chains.  Default
 ##' equals n.chains.
 ##' @param n.thin thinning rate. Must be a positive integer.  Set \code{n.thin}
@@ -60,8 +58,8 @@
 ##' @param working.directory sets working directory during execution of this
 ##' function; This should be the directory where model file is.
 ##' @param jags.seed random seed for \code{JAGS}, default is 123.  This
-##' function is used for jags.parallell() and does not work for jags().  Use
-##' set.seed() instead if you want to produce identical result with jags()
+##' argument is used by jags.parallel() and does not work for jags().  Use
+##' set.seed() instead if you want to produce identical results with jags()
 ##' @param jags.path directory that contains the \code{JAGS} executable.  The
 ##' default is \dQuote{}.
 ##' @param clearWD indicating whether the files \file{data.txt},
@@ -81,7 +79,7 @@
 ##' \code{\link{formatC}}.  Only used if specifying a \code{BUGS} model as an R
 ##' function.
 ##' @param RNGname the name for random number generator used in JAGS. There are
-##' four RNGS supplied by the base moduale in JAGS: \code{Wichmann-Hill},
+##' four RNGs supplied by the base module in JAGS: \code{Wichmann-Hill},
 ##' \code{Marsaglia-Multicarry}, \code{Super-Duper}, \code{Mersenne-Twister}
 ##' @param jags.module the vector of jags modules to be loaded.  Default are
 ##' \dQuote{glm} and \dQuote{dic}. Input NULL if you don't want to load any
@@ -94,6 +92,24 @@
 ##' @param checkMissing Default: FALSE. When TRUE, checks for missing data in
 ##' categorical parameters and returns a \code{sim.list} with NA values if
 ##' detected. It's recommended to supply \code{jags()} with complete data.
+##' @param initrep number of replicate samples that JAGS draws from the prior
+##' when it initializes unobserved stochastic nodes automatically; passed on
+##' to \code{rjags::jags.model()}. With \code{initrep = 1} the initial values
+##' are drawn directly from the prior; larger values concentrate them around
+##' the prior mean (unbounded continuous nodes) or the prior mode (discrete
+##' and bounded nodes). The default \code{NULL} does not pass the argument at
+##' all, leaving the choice to \code{rjags}, whose own default (10000) mimics
+##' the deterministic "typical values" of JAGS before 5.0.0. A numeric vector
+##' of length 2 activates JAGS's expert mode; see the JAGS user manual.
+##' Requires rjags >= 5.0 and JAGS >= 5.0.0.
+##' @param n.threads number of threads that JAGS uses for sampling, passed on
+##' to \code{rjags::jags.model()}. Introduced in JAGS 5, this parallelizes the
+##' sampler manager across chains within one compiled model, and is a different
+##' mechanism from \code{jags.parallel()}, which runs each chain in its own R
+##' process. The default \code{NULL} does not pass the argument at all, leaving
+##' the choice to \code{rjags}, whose own default (\code{n.chains}) already
+##' gives one thread per chain. Requires \code{rjags} (>= 5.0) with JAGS
+##' (>= 5.0.0).
 ##' @author Yu-Sung Su \email{suyusung@@tsinghua.edu.cn}, Masanao Yajima
 ##' \email{yajima@@bu.edu}, Gianluca Baio \email{g.baio@@ucl.ac.uk}
 ##' @references Plummer, Martyn (2003) \dQuote{JAGS: A program for analysis of
@@ -112,12 +128,12 @@
 ##' # running the command
 ##' options(r2j.pb="none")
 ##' # before launching jags shuts down the progress bar. Or running the command
-##' options(r2j.quiet=FALSE)
+##' options(r2j.quiet=TRUE)
 ##' # forces jags to not show the compilation summary. Or running the command
-##' options(r2j.print.progam=FALSE)
+##' options(r2j.print.program=FALSE)
 ##' # modifies the print method and prevents R2jags from printing the name of 
 ##' # software used to run the MCMC analysis. These options may be helpful 
-##' # when using Rmarkdown or quarto to help formtting the output.
+##' # when using Rmarkdown or quarto to help formatting the output.
 ##' #
 ##' # An example model file is given in:
 ##' model.file <- system.file(package="R2jags", "model", "schools.txt")
@@ -262,7 +278,9 @@ jags <- function( data, inits,
                   RNGname = c("Wichmann-Hill", "Marsaglia-Multicarry", "Super-Duper", "Mersenne-Twister"),
                   jags.module = c("glm","dic"),
                   quiet,
-                  checkMissing = FALSE
+                  checkMissing = FALSE,
+                  initrep = NULL,
+                  n.threads = NULL
                   )
 {
   #require( rjags )
@@ -407,13 +425,25 @@ jags <- function( data, inits,
     }
    }
 
-  # Compiles the model object
-  m <- jags.model(model.file,
-                  data     = data,
-                  inits    = init.values,
-                  n.chains = n.chains,
-                  n.adapt  = 0,
-                  quiet = quiet )
+  # Compiles the model object. 'initrep' (issue #27) is JAGS 5's control for
+  # the automatic initialization of unobserved stochastic nodes: it is passed
+  # on only when the user asks for it, so that setups still running an rjags
+  # without the argument (rjags 4-x) are left untouched by default.
+  model.args <- list(
+    file     = model.file,
+    data     = data,
+    inits    = init.values,
+    n.chains = n.chains,
+    n.adapt  = 0,
+    quiet    = quiet
+  )
+  if (!is.null(initrep)) {
+    model.args$initrep <- .check.initrep(initrep)
+  }
+  if (!is.null(n.threads)) {
+    model.args$n.threads <- .check.n.threads(n.threads)
+  }
+  m <- do.call(jags.model, model.args)
   
   # Adds adaptation. This never needs to be verbose, so force
   # 'progress.bar' to 'none' and 'quiet' to TRUE, irrespective of what the
@@ -488,4 +518,29 @@ jags <- function( data, inits,
 
   class(out) <- "rjags"
   return(out)
+}
+
+## Internal: validate the 'initrep' argument of jags() and jags.parallel()
+## (issue #27) before it reaches rjags::jags.model(). Accepts a numeric
+## vector of length 1, or length 2 for JAGS's expert mode (see the JAGS user
+## manual), all values finite and at least 1. Returns it as integer, which is
+## what JAGS counts the prior replicates in.
+.check.initrep <- function(initrep) {
+  if (!is.numeric(initrep) || !(length(initrep) %in% 1:2) ||
+      any(!is.finite(initrep)) || any(initrep < 1)) {
+    stop("'initrep' must be NULL, or a numeric vector of length 1 or 2 ",
+         "of finite values >= 1", call. = FALSE)
+  }
+  as.integer(initrep)
+}
+
+## Internal: validate the 'n.threads' argument of jags() and jags.parallel()
+## A single count of sampling threads; NULL is handled by the caller.
+.check.n.threads <- function(n.threads) {
+  if (!is.numeric(n.threads) || length(n.threads) != 1L ||
+      !is.finite(n.threads) || n.threads < 1) {
+    stop("'n.threads' must be NULL, or a single finite number >= 1",
+         call. = FALSE)
+  }
+  as.integer(n.threads)
 }

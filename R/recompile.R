@@ -1,12 +1,12 @@
 ##' Function for recompiling rjags object
 ##' 
-##' The \code{recompile} takes a \code{rjags} object as input. \code{recompile}
+##' The \code{recompile} function takes a \code{rjags} object as input. \code{recompile}
 ##' will re-compile the previous saved \code{rjags} object.
-##' 
-##' 
+##'
+##'
 ##' @aliases recompile recompile.rjags
 ##' @param object an object of \code{rjags} class.
-##' @param n.iter number of iteration for adapting, default is 100
+##' @param n.iter number of iterations for adaptation, default is 100
 ##' @param refresh refresh frequency for progress bar, default is
 ##' \code{n.iter/50}
 ##' @param progress.bar type of progress bar. Possible values are

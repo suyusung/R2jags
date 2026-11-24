@@ -1,6 +1,6 @@
 #traceplot <- function(x, ...) UseMethod("traceplot")
 
-##' Trace plot of bugs object
+##' Trace plot of a bugs object
 ##' 
 ##' Displays a plot of iterations \emph{vs.} sampled values for each variable
 ##' in the chain, with a separate plot per variable.
