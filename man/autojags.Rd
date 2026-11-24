@@ -23,7 +23,7 @@ autojags(
 
 \item{n.thin}{thinning rate. Must be a positive integer, default=1}
 
-\item{Rhat}{converegence criterion, default=1.1.}
+\item{Rhat}{convergence criterion, default=1.1.}
 
 \item{n.update}{the max number of updates, default=2.}
 
@@ -36,10 +36,10 @@ displayed on the R console. Type \dQuote{gui} is a graphical progress bar
 in a new window. The progress bar is suppressed if \code{progress.bar} is
 \dQuote{none}}
 
-\item{\dots}{further arguments pass to or from other methods.}
+\item{\dots}{further arguments passed to or from other methods.}
 }
 \description{
-The \code{autojags} takes a \code{rjags} object as input. \code{autojags}
+The \code{autojags} function takes a \code{rjags} object as input. \code{autojags}
 will update the model until it converges.
 }
 \examples{

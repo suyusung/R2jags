@@ -27,8 +27,8 @@ to save which should be monitored.}
 default: 2000)}
 
 \item{n.burnin}{length of burn in, i.e. number of iterations to discard at
-the beginning. Default is \code{n.iter/2}, that is, discarding the first
-half of the simulations.}
+the beginning. Default is 1000, that is, discarding the first half of the
+default 2000 simulations.}
 
 \item{n.thin}{thinning rate, default is 2}
 
@@ -37,7 +37,7 @@ DIC. The rule \code{pD=var(deviance) / 2} is used.}
 }
 \description{
 This function reads Markov Chain Monte Carlo output in the CODA format
-produced by \pkg{jags} and returns an object of class
+produced by \code{JAGS} and returns an object of class
 \code{\link[coda]{mcmc.list}} for further output analysis using the
 \pkg{coda} package.
 }

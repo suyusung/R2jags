@@ -1,6 +1,6 @@
 ##' Function for auto-updating \sQuote{JAGS} until the model converges
 ##' 
-##' The \code{autojags} takes a \code{rjags} object as input. \code{autojags}
+##' The \code{autojags} function takes a \code{rjags} object as input. \code{autojags}
 ##' will update the model until it converges.
 ##' 
 ##' 
@@ -8,7 +8,7 @@
 ##' @param object an object of \code{rjags} class.
 ##' @param n.iter number of total iterations per chain, default=1000
 ##' @param n.thin thinning rate. Must be a positive integer, default=1
-##' @param Rhat converegence criterion, default=1.1.
+##' @param Rhat convergence criterion, default=1.1.
 ##' @param n.update the max number of updates, default=2.
 ##' @param refresh refresh frequency for progress bar, default is
 ##' \code{n.iter/50}
@@ -17,7 +17,7 @@
 ##' displayed on the R console. Type \dQuote{gui} is a graphical progress bar
 ##' in a new window. The progress bar is suppressed if \code{progress.bar} is
 ##' \dQuote{none}
-##' @param \dots further arguments pass to or from other methods.
+##' @param \dots further arguments passed to or from other methods.
 ##' @author Yu-Sung Su \email{suyusung@@tsinghua.edu.cn}
 ##' @references Gelman, A., Carlin, J.B., Stern, H.S., Rubin, D.B. (2003):
 ##' \emph{Bayesian Data Analysis}, 2nd edition, CRC Press.

@@ -1,14 +1,14 @@
-##' Retrives the information from the JAGS compilation
-##' 
-##' Retrives the information from the JAGS compilation
-##' 
-##' 
+##' Retrieves the information from the JAGS compilation
+##'
+##' Retrieves the information from the JAGS compilation
+##'
+##'
 ##' @param x A 'rjags' object (obtained from running \code{R2jags::jags}) or a 
-##' 'jags' object (resulting from running \code{rjags::jags.samples}.
+##' 'jags' object (resulting from running \code{rjags::jags.samples()}).
 ##' @param ... Additional parameters that can be passed
 ##' @return A vector with the number of observed, unobserved and total nodes
 ##' included in the DAG resulting from the model assumptions encoded by the
-##' code
+##' code.
 ##' @author Gianluca Baio
 ##' @examples
 ##' 

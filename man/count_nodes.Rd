@@ -2,23 +2,23 @@
 % Please edit documentation in R/get.compilation.R
 \name{count_nodes}
 \alias{count_nodes}
-\title{Retrives the information from the JAGS compilation}
+\title{Retrieves the information from the JAGS compilation}
 \usage{
 count_nodes(x, ...)
 }
 \arguments{
 \item{x}{A 'rjags' object (obtained from running \code{R2jags::jags}) or a 
-'jags' object (resulting from running \code{rjags::jags.samples}.}
+'jags' object (resulting from running \code{rjags::jags.samples()}).}
 
 \item{...}{Additional parameters that can be passed}
 }
 \value{
 A vector with the number of observed, unobserved and total nodes
 included in the DAG resulting from the model assumptions encoded by the
-code
+code.
 }
 \description{
-Retrives the information from the JAGS compilation
+Retrieves the information from the JAGS compilation
 }
 \examples{
 

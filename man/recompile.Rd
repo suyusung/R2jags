@@ -10,7 +10,7 @@ recompile(object, n.iter, refresh, progress.bar)
 \arguments{
 \item{object}{an object of \code{rjags} class.}
 
-\item{n.iter}{number of iteration for adapting, default is 100}
+\item{n.iter}{number of iterations for adaptation, default is 100}
 
 \item{refresh}{refresh frequency for progress bar, default is
 \code{n.iter/50}}
@@ -22,7 +22,7 @@ in a new window. The progress bar is suppressed if \code{progress.bar} is
 \dQuote{none}}
 }
 \description{
-The \code{recompile} takes a \code{rjags} object as input. \code{recompile}
+The \code{recompile} function takes a \code{rjags} object as input. \code{recompile}
 will re-compile the previous saved \code{rjags} object.
 }
 \examples{
