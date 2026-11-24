@@ -16,11 +16,13 @@
 ##' session is running, a dialog box asks the user whether masking objects
 ##' should be deleted.  In non-interactive mode, behaviour is identical to
 ##' \code{overwrite=FALSE}, i.e. nothing will be deleted.
-##' @author Yu-Sung Su \email{suyusung@@tsinghua.edu.cn},
+##' @author Yu-Sung Su \email{suyusung@@tsinghua.edu.cn}
 ##' @references Sibylle Sturtz and Uwe Ligges and Andrew Gelman. (2005).
 ##' \dQuote{R2WinBUGS: A Package for Running WinBUGS from R.} \emph{Journal of
 ##' Statistical Software} 3 (12): 1--6.
 ##' @keywords interface
+##' @usage attach.jags(x, overwrite = NA)
+##' @usage detach.jags()
 ##' @examples
 ##' 
 ##' 

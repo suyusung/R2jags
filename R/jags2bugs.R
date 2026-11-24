@@ -1,7 +1,7 @@
 ##' Read jags output files in CODA format
 ##' 
 ##' This function reads Markov Chain Monte Carlo output in the CODA format
-##' produced by \pkg{jags} and returns an object of class
+##' produced by \code{JAGS} and returns an object of class
 ##' \code{\link[coda]{mcmc.list}} for further output analysis using the
 ##' \pkg{coda} package.
 ##' 
@@ -14,8 +14,8 @@
 ##' @param n.iter number of total iterations per chain (including burn in;
 ##' default: 2000)
 ##' @param n.burnin length of burn in, i.e. number of iterations to discard at
-##' the beginning. Default is \code{n.iter/2}, that is, discarding the first
-##' half of the simulations.
+##' the beginning. Default is 1000, that is, discarding the first half of the
+##' default 2000 simulations.
 ##' @param n.thin thinning rate, default is 2
 ##' @param DIC logical; if \code{TRUE} (default), compute deviance, pD, and
 ##' DIC. The rule \code{pD=var(deviance) / 2} is used.

@@ -96,7 +96,7 @@ default: 2000)}
 \item{n.burnin}{length of burn in, i.e. number of iterations to discard at
 the beginning. Default is \code{n.iter/2}, that is, discarding the first
 half of the simulations. If n.burnin is 0, \code{jags()} will run 100
-iterations for adaption.}
+iterations for adaptation.}
 
 \item{n.thin}{thinning rate. Must be a positive integer.  Set \code{n.thin}
 > 1 to save memory and computation time if \code{n.iter} is large.  Default
@@ -120,8 +120,8 @@ creating the model object. Defaults at 100.}
 function; This should be the directory where model file is.}
 
 \item{jags.seed}{random seed for \code{JAGS}, default is 123.  This
-function is used for jags.parallell() and does not work for jags().  Use
-set.seed() instead if you want to produce identical result with jags()}
+argument is used by jags.parallel() and does not work for jags().  Use
+set.seed() instead if you want to produce identical results with jags()}
 
 \item{refresh}{refresh frequency for progress bar, default is
 \code{n.iter/50}}
@@ -139,7 +139,7 @@ package: number of significant digits used for \code{BUGS} input, see
 function.}
 
 \item{RNGname}{the name for random number generator used in JAGS. There are
-four RNGS supplied by the base moduale in JAGS: \code{Wichmann-Hill},
+four RNGs supplied by the base module in JAGS: \code{Wichmann-Hill},
 \code{Marsaglia-Multicarry}, \code{Super-Duper}, \code{Mersenne-Twister}}
 
 \item{jags.module}{the vector of jags modules to be loaded.  Default are
@@ -178,22 +178,20 @@ simulations for easy access in R.
 To run: \enumerate{ \item Write a \code{JAGS} model in an ASCII file.
 \item Go into \R.  \item Prepare the inputs for the \code{jags} function
 and run it (see Example section).  \item The model will now run in
-\code{JAGS}. It might take awhile. You will see things happening in the R
+\code{JAGS}. It might take a while. You will see things happening in the R
 console.  }
-
-% BUGS version support: % \itemize{ % \item \pkg{jags} 1.0.3 {default} % }
 }
 \examples{
 # Can set global options for some of the features of R2jags. For example
 # running the command
 options(r2j.pb="none")
 # before launching jags shuts down the progress bar. Or running the command
-options(r2j.quiet=FALSE)
+options(r2j.quiet=TRUE)
 # forces jags to not show the compilation summary. Or running the command
-options(r2j.print.progam=FALSE)
+options(r2j.print.program=FALSE)
 # modifies the print method and prevents R2jags from printing the name of 
 # software used to run the MCMC analysis. These options may be helpful 
-# when using Rmarkdown or quarto to help formtting the output.
+# when using Rmarkdown or quarto to help formatting the output.
 #
 # An example model file is given in:
 model.file <- system.file(package="R2jags", "model", "schools.txt")

@@ -6,6 +6,8 @@
 \title{Attach/detach elements of \sQuote{JAGS} objects to search path}
 \usage{
 attach.jags(x, overwrite = NA)
+
+detach.jags()
 }
 \arguments{
 \item{x}{An \code{rjags} object.}
@@ -20,7 +22,9 @@ should be deleted.  In non-interactive mode, behaviour is identical to
 \description{
 These attach or detach the three-way-simulation array of a bugs object to the
 search path, so that the elements of \code{sims.list} can be referred to by
-name.
+name.  They do what \code{R2WinBUGS::attach.bugs} and
+\code{R2WinBUGS::detach.bugs} do, and until 0.9-0 the package carried a
+dependency on \pkg{R2WinBUGS} for their sake alone (issue #3).
 }
 \details{
 See the examples in \code{\link{jags}} for the usage.
@@ -38,6 +42,6 @@ Sibylle Sturtz and Uwe Ligges and Andrew Gelman. (2005).
 Statistical Software} 3 (12): 1--6.
 }
 \author{
-Yu-Sung Su \email{suyusung@tsinghua.edu.cn},
+Yu-Sung Su \email{suyusung@tsinghua.edu.cn}
 }
 \keyword{interface}
