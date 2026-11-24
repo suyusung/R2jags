@@ -4,9 +4,13 @@
 ## below are the ones it produced.  What the package computes now was checked
 ## against R2WinBUGS::monitor() -- 48 combinations of five draw sets (multi-chain
 ## mixed signs, all positive, single chain, proportions, degenerate) with every
-## keep.all, Rupper.keep and trans setting -- and every comparison is
-## bit-identical, with the same errors on the same out-of-domain inputs.  These
-## tests pin the numbers so that a future change cannot move them silently.
+## keep.all, Rupper.keep and trans setting -- and every comparison was
+## bit-identical at the time, with the same errors on the same out-of-domain
+## inputs. These tests pin the numbers so that a future change cannot move them
+## silently. The numeric comparisons use a relative tolerance of 1e-12 rather
+## than exact identity: quantile() results move by one ulp between platforms
+## (FMA contraction on arm64 versus x86-64), far below any change that could
+## matter statistically, and that drift is not a regression.
 
 test_that("monitor() summarises the kept draws exactly as it always has (#3)", {
   set.seed(1)
@@ -19,14 +23,16 @@ test_that("monitor() summarises the kept draws exactly as it always has (#3)", {
                    c("mean", "sd", "2.5%", "25%", "50%", "75%", "97.5%", "Rhat", "n.eff"))
   expect_identical(rownames(s), c("alpha", "beta"))
 
-  expect_identical(unname(s["alpha", ]),
-                   c(0.033584275126047752, 0.963695897185394390, -1.862394047205248926,
-                     -0.589051101241765851, -0.038437087100108583, 0.672734465686813943,
-                     2.030193581332730979, 1.001970061720514948, 300))
-  expect_identical(unname(s["beta", ]),
-                   c(-0.010683912860323479, 1.043838678256150621, -2.122223535529929705,
-                     -0.698227738514206608, -0.041826297550518803, 0.679773061311617965,
-                     1.891769126525841394, 1.004391902846560880, 300))
+  expect_equal(unname(s["alpha", ]),
+               c(0.033584275126047752, 0.963695897185394390, -1.862394047205248926,
+                 -0.589051101241765851, -0.038437087100108583, 0.672734465686813943,
+                 2.030193581332730979, 1.001970061720514948, 300),
+               tolerance = 1e-12)
+  expect_equal(unname(s["beta", ]),
+               c(-0.010683912860323479, 1.043838678256150621, -2.122223535529929705,
+                 -0.698227738514206608, -0.041826297550518803, 0.679773061311617965,
+                 1.891769126525841394, 1.004391902846560880, 300),
+               tolerance = 1e-12)
 })
 
 test_that("one chain gets the seven-column form (#3)", {
@@ -38,10 +44,11 @@ test_that("one chain gets the seven-column form (#3)", {
   expect_identical(dim(s), c(1L, 7L))
   expect_identical(colnames(s),
                    c("mean", "sd", "2.5%", "25%", "50%", "75%", "97.5%"))
-  expect_identical(unname(s["gamma", ]),
-                   c(0.069137914357987940, 1.129682364802339523, -2.231876754981608091,
-                     -0.596333751146496560, -0.037656989861423344, 0.778887103665268254,
-                     1.989469973321651874))
+  expect_equal(unname(s["gamma", ]),
+               c(0.069137914357987940, 1.129682364802339523, -2.231876754981608091,
+                 -0.596333751146496560, -0.037656989861423344, 0.778887103665268254,
+                 1.989469973321651874),
+               tolerance = 1e-12)
 })
 
 test_that("a parameter whose draws never vary does not produce NaN (#3)", {
