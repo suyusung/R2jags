@@ -35,7 +35,7 @@ output: github_document
 ## Features
 Main features of `R2jags` include:
 
-* Wrapping functions from `rjags` and `R2WinBUGS` to run `JAGS` in the background and produce a MCMC analysis of a given model.
+* Wrapping functions around `rjags` to run `JAGS` in the background and produce a MCMC analysis of a given model.
 * Summary statistics and tables
 * Convergence and auto-correlation calculations and plots
 

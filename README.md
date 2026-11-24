@@ -14,7 +14,7 @@ R2jags: Using R to Run JAGS to perform Bayesian inference using MCMC
 > Perform Bayesian modelling in R using JAGS.
 
 :rocket: This is the **development version** of the `R` package `R2jags`
-(currently on version 0.8-10). The stable version is now release 0.8-9,
+(currently on version 0.9-0). The stable version is now release 0.8-9,
 on [CRAN](https://cran.r-project.org/web/packages/R2jags/index.html).
 
 ## Contents
@@ -37,7 +37,7 @@ MCMC model for multiple chains.
 
 Main features of `R2jags` include:
 
-- Wrapping functions from `rjags` and `R2WinBUGS` to run `JAGS` in the
+- Wrapping functions around `rjags` to run `JAGS` in the
   background and produce a MCMC analysis of a given model.
 - Summary statistics and tables
 - Convergence and auto-correlation calculations and plots
