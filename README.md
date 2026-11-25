@@ -7,15 +7,15 @@ R2jags: Using R to Run JAGS to perform Bayesian inference using MCMC
 -->
 
 [![R-CMD-check](https://github.com/giabaio/R2jags/actions/workflows/check-standard.yaml/badge.svg?branch=main)](https://github.com/giabaio/R2jags/actions/workflows/check-standard.yaml)
-[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/R2jags)](https://cran.r-project.org/package=R2jags)
-[![CRAN_Download_Badge](https://cranlogs.r-pkg.org/badges/R2jags)](https://cran.r-project.org/package=R2jags)
-[![CRAN_Download_Badge](https://cranlogs.r-pkg.org/badges/grand-total/R2jags?color=orange)](https://cran.r-project.org/package=R2jags)
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/R2jags)](https://CRAN.R-project.org/package=R2jags)
+[![CRAN_Download_Badge](https://cranlogs.r-pkg.org/badges/R2jags)](https://CRAN.R-project.org/package=R2jags)
+[![CRAN_Download_Badge](https://cranlogs.r-pkg.org/badges/grand-total/R2jags?color=orange)](https://CRAN.R-project.org/package=R2jags)
 
 > Perform Bayesian modelling in R using JAGS.
 
 :rocket: This is the **development version** of the `R` package `R2jags`
 (currently on version 0.9-0). The stable version is now release 0.8-9,
-on [CRAN](https://cran.r-project.org/web/packages/R2jags/index.html).
+on [CRAN](https://CRAN.R-project.org/package=R2jags).
 
 ## Contents
 
@@ -45,7 +45,7 @@ Main features of `R2jags` include:
 ## Installation
 
 Install the [released version from
-CRAN](https://cran.r-project.org/package=R2jags) with
+CRAN](https://CRAN.R-project.org/package=R2jags) with
 
 ``` r
 install.packages("R2jags")
