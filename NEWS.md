@@ -2,6 +2,8 @@
 
 _November 2026_
 
+* Objects of class `bugs` -- what `jags()` stores in `BUGSoutput` -- are methods-bearing again. Until 0.9-0 these came implicitly from `R2WinBUGS`, which `R2jags` loaded through a `Depends` and which registered `as.mcmc.list.bugs()` and `print.bugs()` globally; dropping the dependency removed them, breaking user code that calls `coda::as.mcmc.list(fit$BUGSoutput)` (found by the CRAN reverse-dependency pretest via `mvnma`). Both methods are now ported into this package and registered here, the same as the other ported functions. `R2WinBUGS`'s `plot.bugs()` was not ported: use `traceplot()` instead.
+
 * `jags()` and `jags.parallel()` gained an `initrep` argument, passed on to `rjags::jags.model()`: the number of replicate samples JAGS 5 draws from the prior when it initializes unobserved stochastic nodes automatically (#27). `initrep = 1` draws the initial values themselves from the prior; a vector of length 2 activates JAGS's expert mode. The default `NULL` does not pass the argument at all, leaving the choice to `rjags` and keeping installations on rjags 4-x working untouched.
 
 * `jags()` and `jags.parallel()` gained an `n.threads` argument, passed on to `rjags::jags.model()`: the number of threads JAGS 5 uses for sampling, parallelizing the sampler manager across the chains of one compiled model (#27). It is a different mechanism from `jags.parallel()`, which runs each chain in its own R process. The default `NULL` does not pass the argument, leaving rjags's own default (one thread per chain) in place.
